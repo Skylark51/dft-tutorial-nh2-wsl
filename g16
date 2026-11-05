@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+"""Validate the two NH2 lesson inputs and replay the matching Gaussian output."""
+
+import re
+import sys
+from decimal import Decimal
+from pathlib import Path
+
+
+DATA = Path(__file__).resolve().parent.parent / "data"
+ROUTES = {
+    frozenset(("uhf/6-31g(d)", "guess=only")): "nh2-guess",
+    frozenset(("uhf/6-31g(d)", "opt", "guess=alter")): "nh2-alter",
+}
+LINK0 = {
+    "chk": r"[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*\.chk",
+    "cpu": r"0-1",
+    "nprocshared": r"2",
+    "mem": r"1gb|1024mb",
+}
+
+
+def validate(source):
+    if "\x00" in source:
+        raise ValueError("Use a plain-text Gaussian input.")
+    if not source.endswith("\n"):
+        raise ValueError("Finish the input with a blank line.")
+    lines = [line.strip() for line in source.split("\n")[:-1]]
+    headers = set()
+    while lines and lines[0].startswith("%"):
+        key, _, value = lines.pop(0)[1:].lower().partition("=")
+        key = key.strip()
+        if key not in LINK0 or key in headers or not re.fullmatch(LINK0[key], value.strip()):
+            raise ValueError("Use %chk=<name>.chk, %CPU=0-1 (or %nprocshared=2), and %mem=1GB as needed.")
+        headers.add(key)
+    if {"cpu", "nprocshared"} <= headers:
+        raise ValueError("Use just one of %CPU and %nprocshared.")
+
+    def section(message):
+        try:
+            end = lines.index("")
+        except ValueError:
+            raise ValueError(message) from None
+        block = lines[:end]
+        del lines[:end + 1]
+        if not block:
+            raise ValueError(message)
+        return block
+
+    route = " ".join(section("Start with a route and end it with a blank line.")).lower()
+    match = re.fullmatch(r"#(?:[pn]\s+|\s*)(.+)", route)
+    words = match[1].split() if match else []
+    job = ROUTES.get(frozenset(words))
+    if not job or len(words) != len(set(words)):
+        raise ValueError("Use #p UHF/6-31G(d) Guess=Only or #p UHF/6-31G(d) Opt Guess=Alter.")
+    section("Enter a title followed by a blank line.")
+    molecule = section("End the NH2 Z-matrix and its Variables block with a blank line.")
+    if molecule[0].split() != ["0", "2"]:
+        raise ValueError("Use charge 0 and multiplicity 2.")
+    geometry = [line.lower().split() for line in molecule[1:]]
+    if geometry[:4] != [["n"], ["h", "1", "nh"], ["h", "1", "nh", "2", "hnh"], ["variables:"]]:
+        raise ValueError("Use the lesson NH2 Z-matrix with Variables:, nh and hnh.")
+    values = {}
+    for fields in geometry[4:]:
+        if len(fields) != 2 or fields[0] in values or not re.fullmatch(r"\d+(?:\.\d*)?", fields[1]):
+            raise ValueError("Set nh to 1.03 and hnh to 120.0.")
+        values[fields[0]] = Decimal(fields[1])
+    if values != {"nh": Decimal("1.03"), "hnh": Decimal("120.0")}:
+        raise ValueError("Set nh to 1.03 and hnh to 120.0.")
+
+    if job == "nh2-alter":
+        if len(lines) < 3 or lines[0] or lines[1].split() != ["4", "5"] or lines[2]:
+            raise ValueError("After the molecule's blank line, leave another blank line for alpha, then enter 4 5 and a blank line for beta.")
+        del lines[:3]
+    if any(lines):
+        raise ValueError("Remove extra input after the final blank line.")
+    return job
+
+
+def main():
+    try:
+        if len(sys.argv) != 1 or sys.stdin.isatty():
+            raise ValueError("Usage: g16 < A.inp > A.out")
+        source = sys.stdin.buffer.read(65537)
+        if len(source) > 65536:
+            raise ValueError("The lesson input exceeds 64 KiB.")
+        job = validate(source.decode("utf-8").replace("\r\n", "\n"))
+        output = (DATA / f"{job}.out").read_bytes()
+    except (ValueError, OSError) as error:
+        print(f"NH2 tutorial: {error}", file=sys.stderr)
+        return 1
+    print(f"NH2 tutorial: replaying Lion reference output ({job}).", file=sys.stderr)
+    sys.stdout.buffer.write(output)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,8 @@
+# Source in the WSL Bash session used for class.
+_nh2_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+export PATH="$_nh2_dir/bin:$PATH"
+unset _nh2_dir
+unalias g16 2>/dev/null || true
+unset -f g16
+hash -r
+printf '%s\n' 'NH2 tutorial active. Run: g16 < A.inp > A.out'
