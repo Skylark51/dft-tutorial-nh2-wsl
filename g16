@@ -3,6 +3,7 @@
 
 import re
 import sys
+import time
 from decimal import Decimal
 from pathlib import Path
 
@@ -89,8 +90,11 @@ def main():
     except (ValueError, OSError) as error:
         print(f"NH2 tutorial: {error}", file=sys.stderr)
         return 1
-    print(f"NH2 tutorial: replaying Lion reference output ({job}).", file=sys.stderr)
+    print("NH₂ 모의 계산 중…", file=sys.stderr, flush=True)
+    time.sleep(5)
     sys.stdout.buffer.write(output)
+    sys.stdout.buffer.flush()
+    print("NH₂ 모의 계산 완료.", file=sys.stderr, flush=True)
     return 0
 
 

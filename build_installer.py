@@ -27,8 +27,8 @@ with tarfile.open(fileobj=archive, mode="w:gz") as package:
 header = r"""#!/usr/bin/env bash
 set -euo pipefail
 command -v python3 >/dev/null || { echo 'Install python3 in WSL first.' >&2; exit 1; }
-root="$HOME/.local/share"
-target="$root/dft-nh2"
+root="$HOME/.local/share/dft-nh2"
+target="$root/v1.1.0"
 mkdir -p -- "$root"
 stage=$(mktemp -d "$root/.dft-nh2.XXXXXXXX")
 trap 'rm -r -- "$stage"' EXIT
@@ -36,13 +36,16 @@ mkdir -- "$stage/lesson"
 base64 -d <<'NH2_PAYLOAD' | tar -xz -C "$stage/lesson"
 """
 footer = r"""NH2_PAYLOAD
-if ! mv -T -- "$stage/lesson" "$target"; then
-    echo 'An NH2 tutorial installation already exists or could not be installed.' >&2
-    exit 1
+if [[ ! -f "$target/activate" ]]; then
+    mv -T -- "$stage/lesson" "$target"
 fi
-printf '%s\n' 'Installed. To start: source ~/.local/share/dft-nh2/activate'
+if ( : </dev/tty ) 2>/dev/null; then
+    bash --rcfile "$target/activate" -i </dev/tty
+else
+    printf '실습 셸 열기: bash --rcfile %q -i\n' "$target/activate"
+fi
 """
 installer = ROOT / "install-dft-nh2.sh"
 installer.write_bytes(
-    header.encode("ascii") + base64.encodebytes(archive.getvalue()) + footer.encode("ascii")
+    header.encode("ascii") + base64.encodebytes(archive.getvalue()) + footer.encode("utf-8")
 )
