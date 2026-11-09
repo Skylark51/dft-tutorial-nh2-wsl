@@ -6,18 +6,27 @@ import re
 import stat
 import subprocess
 import sys
+import tempfile
 import time
 from decimal import Decimal
 from pathlib import Path
 
 
 DATA = Path(__file__).resolve().parent.parent / "data"
+BASES = {"def2svp", "def2tzvpp"}
+ANALYSIS = {"geom=allcheck", "pop=(full,nbo)", "gfinput", "gfoldprint"}
 ROUTES = {
-    frozenset(("uhf/6-31g(d)", "guess=only")): "nh2-guess",
-    frozenset(("uhf/6-31g(d)", "opt", "guess=alter")): "nh2-alter",
+    frozenset(("opt", "pop=full")): "opt",
+    frozenset(ANALYSIS | {"guess=(read,only)"}): "read",
+    frozenset(ANALYSIS | {"guess=(read,only,alter,save)"}): "swap",
+    frozenset(ANALYSIS | {"guess=read", "sp"}): "scf",
 }
+PREREQUISITES = {"read": "opt", "swap": "opt", "scf": "swap"}
+CHECKPOINT = "NH2 WSL tutorial checkpoint"
+CHECKPOINT_NAME = r"[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*\.[cC][hH][kK]"
 LINK0 = {
-    "chk": r"[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*\.chk",
+    "chk": CHECKPOINT_NAME,
+    "oldchk": CHECKPOINT_NAME,
     "cpu": r"0-1",
     "nprocshared": r"2",
     "mem": r"1gb|1024mb",
@@ -30,14 +39,14 @@ def validate(source):
     if not source.endswith("\n"):
         raise ValueError("Finish the input with a blank line.")
     lines = [line.strip() for line in source.split("\n")[:-1]]
-    headers = set()
+    headers = {}
     while lines and lines[0].startswith("%"):
-        key, _, value = lines.pop(0)[1:].lower().partition("=")
-        key = key.strip()
-        if key not in LINK0 or key in headers or not re.fullmatch(LINK0[key], value.strip()):
-            raise ValueError("Use %chk=<name>.chk, %CPU=0-1 (or %nprocshared=2), and %mem=1GB as needed.")
-        headers.add(key)
-    if {"cpu", "nprocshared"} <= headers:
+        key, _, value = lines.pop(0)[1:].partition("=")
+        key, value = key.strip().lower(), value.strip()
+        if key not in LINK0 or key in headers or not re.fullmatch(LINK0[key], value, re.IGNORECASE):
+            raise ValueError("Check the %chk, %oldchk, CPU and memory lines against the lesson input.")
+        headers[key] = value
+    if {"cpu", "nprocshared"} <= headers.keys():
         raise ValueError("Use just one of %CPU and %nprocshared.")
 
     def section(message):
@@ -53,12 +62,35 @@ def validate(source):
 
     route = " ".join(section("Start with a route and end it with a blank line.")).lower()
     match = re.fullmatch(r"#(?:[pn]\s+|\s*)(.+)", route)
-    words = match[1].split() if match else []
-    job = ROUTES.get(frozenset(words))
-    if not job or len(words) != len(set(words)):
-        raise ValueError("Use #p UHF/6-31G(d) Guess=Only or #p UHF/6-31G(d) Opt Guess=Alter.")
-    section("Enter a title followed by a blank line.")
-    molecule = section("End the NH2 Z-matrix and its Variables block with a blank line.")
+    words = re.sub(r"\s*,\s*", ",", match[1]).split() if match else []
+    methods = {f"ub3lyp/{basis}" for basis in BASES} & set(words)
+    step = ROUTES.get(frozenset(set(words) - methods))
+    if not step or len(methods) != 1 or len(words) != len(set(words)):
+        raise ValueError("Use one of the UB3LYP/def2SVP or UB3LYP/def2TZVPP lesson routes.")
+    basis = methods.pop().split("/")[1]
+    chk = headers.get("chk")
+    oldchk = headers.get("oldchk")
+    if not chk or bool(oldchk) != (step in PREREQUISITES) or chk == oldchk:
+        raise ValueError("Use %chk for this job and, for Geom=AllCheck, a separate %oldchk.")
+
+    if step == "opt":
+        section("Enter a title followed by a blank line.")
+        molecule = section("End the NH2 Z-matrix and its Variables block with a blank line.")
+        validate_geometry(molecule)
+    if step == "swap":
+        if len(lines) < 3 or lines[0] or lines[1].split() != ["4", "5"] or lines[2]:
+            raise ValueError("After the route's blank line, leave another blank line for alpha, then enter 4 5 and a blank line for beta.")
+        del lines[:3]
+    if any(lines):
+        raise ValueError("Remove extra input after the final blank line.")
+    if oldchk:
+        expected = f"{CHECKPOINT}\n{basis} {PREREQUISITES[step]}\n".encode()
+        if not matches_checkpoint(oldchk, expected):
+            raise ValueError(f"%oldchk must be the {basis} {PREREQUISITES[step]} lesson checkpoint.")
+    return basis, step, chk
+
+
+def validate_geometry(molecule):
     if molecule[0].split() != ["0", "2"]:
         raise ValueError("Use charge 0 and multiplicity 2.")
     geometry = [line.lower().split() for line in molecule[1:]]
@@ -72,13 +104,28 @@ def validate(source):
     if values != {"nh": Decimal("1.03"), "hnh": Decimal("120.0")}:
         raise ValueError("Set nh to 1.03 and hnh to 120.0.")
 
-    if job == "nh2-alter":
-        if len(lines) < 3 or lines[0] or lines[1].split() != ["4", "5"] or lines[2]:
-            raise ValueError("After the molecule's blank line, leave another blank line for alpha, then enter 4 5 and a blank line for beta.")
-        del lines[:3]
-    if any(lines):
-        raise ValueError("Remove extra input after the final blank line.")
-    return job
+
+def matches_checkpoint(chk, marker):
+    path = Path(chk)
+    try:
+        if path.is_file() and not path.is_symlink():
+            with path.open("rb") as handle:
+                return handle.read(len(marker) + 1) == marker
+    except OSError:
+        pass
+    return False
+
+
+def save_checkpoint(chk, basis, step):
+    marker = f"{CHECKPOINT}\n{basis} {step}\n".encode()
+    with tempfile.TemporaryDirectory(dir=".") as stage:
+        path = Path(stage) / "checkpoint"
+        path.write_bytes(marker)
+        try:
+            os.link(path, chk)
+        except FileExistsError:
+            if not matches_checkpoint(chk, marker):
+                raise ValueError("Choose a different %chk name. This file belongs to another job.")
 
 
 def open_output():
@@ -109,13 +156,14 @@ def main():
         source = sys.stdin.buffer.read(65537)
         if len(source) > 65536:
             raise ValueError("The lesson input exceeds 64 KiB.")
-        job = validate(source.decode("utf-8").replace("\r\n", "\n"))
-        output = (DATA / f"{job}.out").read_bytes()
+        basis, step, chk = validate(source.decode("utf-8").replace("\r\n", "\n"))
+        output = (DATA / f"nh2-{basis}-{step}.out").read_bytes()
+        print("NH₂ 모의 계산 중…", file=sys.stderr, flush=True)
+        time.sleep(5)
+        save_checkpoint(chk, basis, step)
     except (ValueError, OSError) as error:
         print(f"NH2 tutorial: {error}", file=sys.stderr)
         return 1
-    print("NH₂ 모의 계산 중…", file=sys.stderr, flush=True)
-    time.sleep(5)
     sys.stdout.buffer.write(output)
     sys.stdout.buffer.flush()
     print("NH₂ 모의 계산 완료.", file=sys.stderr, flush=True)

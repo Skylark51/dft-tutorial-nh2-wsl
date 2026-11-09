@@ -1,0 +1,9 @@
+%oldchk=nh2-def2svp-opt.chk
+%chk=nh2-def2svp-swap.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2SVP Geom=AllCheck Guess=(Read,Only,Alter,Save) Pop=(Full,NBO) GFInput GFOldPrint
+
+
+4 5
+

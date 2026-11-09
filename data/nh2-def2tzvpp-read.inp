@@ -1,0 +1,6 @@
+%oldchk=nh2-def2tzvpp-opt.chk
+%chk=nh2-def2tzvpp-read.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2TZVPP Geom=AllCheck Guess=(Read,Only) Pop=(Full,NBO) GFInput GFOldPrint
+

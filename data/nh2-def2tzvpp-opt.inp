@@ -1,0 +1,15 @@
+%chk=nh2-def2tzvpp-opt.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2TZVPP Opt Pop=Full
+
+NH2 radical ground-state optimization
+
+0 2
+N
+H 1 nh
+H 1 nh 2 hnh
+Variables:
+nh 1.03
+hnh 120.0
+
