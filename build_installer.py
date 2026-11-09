@@ -27,18 +27,19 @@ with tarfile.open(fileobj=archive, mode="w:gz") as package:
 header = r"""#!/usr/bin/env bash
 set -euo pipefail
 command -v python3 >/dev/null || { echo 'Install python3 in WSL first.' >&2; exit 1; }
+command -v vi >/dev/null || { echo 'Install vi in WSL first.' >&2; exit 1; }
 root="$HOME/.local/share/dft-nh2"
-target="$root/v1.1.0"
+target="$root/v1.2.0"
 mkdir -p -- "$root"
+if [[ ! -f "$target/activate" ]]; then (
 stage=$(mktemp -d "$root/.dft-nh2.XXXXXXXX")
 trap 'rm -r -- "$stage"' EXIT
 mkdir -- "$stage/lesson"
 base64 -d <<'NH2_PAYLOAD' | tar -xz -C "$stage/lesson"
 """
 footer = r"""NH2_PAYLOAD
-if [[ ! -f "$target/activate" ]]; then
-    mv -T -- "$stage/lesson" "$target"
-fi
+mv -T -- "$stage/lesson" "$target" || [[ -f "$target/activate" ]]
+); fi
 if ( : </dev/tty ) 2>/dev/null; then
     bash --rcfile "$target/activate" -i </dev/tty
 else

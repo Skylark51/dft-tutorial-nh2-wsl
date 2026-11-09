@@ -2,30 +2,30 @@
 
 ## 설치
 
-Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`, `less`가 필요합니다. 관리자 권한이나 라이온 계정은 필요 없습니다.
+Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다. 관리자 권한이나 라이온 계정은 필요 없습니다.
 
 GitHub에서 설치 파일을 내려받고 실습 셸을 여는 명령입니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.1.0/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.2.0/install-dft-nh2.sh)
 ```
 
-인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.1.0/activate -i`를 실행합니다. 실습 셸은 `exit`로 닫습니다.
+셸이 열리면 실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 파일은 WSL 홈 아래 `~/.local/share/dft-nh2/workspaces/`에 저장됩니다. 다시 열 때 같은 이름을 입력하면 이어서 실습할 수 있습니다.
+
+인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.2.0/activate -i`를 실행합니다. 실습 셸은 `exit`로 닫습니다.
 
 ## 실습
 
 ```bash
-mkdir -p ~/nh2-lesson
-cd ~/nh2-lesson
-nh2 guess nh2-ground.inp
-nh2 alter nh2-swap.inp
+vi nh2-swap.inp
+g16 < nh2-swap.inp > nh2-swap.out
 ```
 
-1. 파일명은 원하는 `.inp` 이름으로 정합니다. 새 파일은 TODO가 있는 입력으로 시작하고 `vi`에서 열립니다. 기본 초기 추정의 TODO는 전하와 다중도 `0 2`로 바꿉니다.
-2. 오비탈 교환 입력의 TODO는 β 교환 쌍 `4 5`로 바꿉니다. 변수 블록을 닫는 빈 줄에 이어 **α 교환 섹션을 닫는 빈 줄**을 유지하고, `4 5` 뒤에도 빈 줄을 둡니다.
-3. `Esc`를 누르고 `:wq`로 저장합니다. 실습 셸이 `g16 < 입력.inp > 입력.out`을 실행합니다. 입력 검증이 통과하면 약 5초 뒤 완료 메시지가 표시되고 같은 이름의 `.out` 파일이 열립니다. `q`로 닫습니다. 오류가 뜨면 같은 `nh2` 명령으로 입력을 다시 수정합니다.
+파일명은 예시입니다. `vi`에서 `i`를 눌러 입력을 작성하고, `Esc` 후 `:wq`로 저장합니다. 같은 `vi` 명령으로 입력을 다시 열 수 있습니다. 기본 초기 추정의 route는 `#p UHF/6-31G(d) Guess=Only`입니다. 교환 실습에는 `#p UHF/6-31G(d) Opt Guess=Alter`를 사용합니다. 두 입력 모두 전하와 다중도는 `0 2`입니다. 교환 입력에서는 변수 블록 뒤에 **α 교환 섹션을 닫는 빈 줄**을 한 줄 더 두고, β 교환 쌍 `4 5`를 입력한 뒤 빈 줄로 닫습니다.
 
-직접 실행하려면 `vi nh2-swap.inp`로 편집한 뒤 `g16 < nh2-swap.inp > nh2-swap.out && less nh2-swap.out`을 실행합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.1.0/data/`에서 확인할 수 있습니다. 오류는 터미널에 표시되고 종료 코드는 1입니다. `>`는 Bash가 처리하므로 입력 오류가 나도 대상 출력 파일은 비워집니다.
+입력이 맞으면 약 5초 뒤 완료 메시지가 표시되고, 지정한 출력 파일이 `vi`에서 읽기 전용으로 열립니다. `/orbitals switched` 또는 `/Optimization completed`를 입력하고 Enter를 누르면 해당 줄로 이동합니다. `:q`로 닫으면 셸로 돌아갑니다. 출력은 `vi nh2-swap.out`으로도 다시 열 수 있습니다.
+
+완성 입력은 `~/.local/share/dft-nh2/v1.2.0/data/`에서 확인할 수 있습니다. 입력이 틀리면 터미널에 오류가 표시됩니다. `>`는 Bash가 처리하므로 입력 오류가 나도 대상 출력 파일은 비워집니다.
 
 ## 라이온 기준 결과
 

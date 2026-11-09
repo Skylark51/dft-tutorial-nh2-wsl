@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Validate the two NH2 lesson inputs and replay the matching Gaussian output."""
 
+import os
 import re
+import stat
+import subprocess
 import sys
 import time
 from decimal import Decimal
@@ -78,10 +81,31 @@ def validate(source):
     return job
 
 
+def open_output():
+    """Open the redirected log only when this job owns the terminal."""
+    fd = sys.stdout.fileno()
+    if not stat.S_ISREG(os.fstat(fd).st_mode):
+        return
+    try:
+        with open("/dev/tty", "r+b", buffering=0) as terminal:
+            if os.tcgetpgrp(terminal.fileno()) != os.getpgrp():
+                return
+            # Bash already opened the output before launching g16.
+            path = os.readlink(f"/proc/self/fd/{fd}")
+            if not os.path.samestat(os.stat(path), os.fstat(fd)):
+                return
+            subprocess.run(
+                ["vi", "-R", "--", path], stdin=terminal, stdout=terminal, stderr=terminal
+            )
+    except OSError as error:
+        if sys.stderr.isatty():
+            print(f"NH₂: 출력은 저장되었습니다. vi로 파일을 여세요. ({error})", file=sys.stderr)
+
+
 def main():
     try:
         if len(sys.argv) != 1 or sys.stdin.isatty():
-            raise ValueError("Usage: g16 < A.inp > A.out")
+            raise ValueError("Usage: g16 < input.inp > output.out")
         source = sys.stdin.buffer.read(65537)
         if len(source) > 65536:
             raise ValueError("The lesson input exceeds 64 KiB.")
@@ -95,6 +119,7 @@ def main():
     sys.stdout.buffer.write(output)
     sys.stdout.buffer.flush()
     print("NH₂ 모의 계산 완료.", file=sys.stderr, flush=True)
+    open_output()
     return 0
 
 

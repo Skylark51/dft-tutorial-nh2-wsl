@@ -1,32 +1,30 @@
-# Source in the WSL Bash session used for class.
+# Loaded by the interactive Bash process for the lesson.
 _nh2_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 export PATH="$_nh2_dir/bin:$PATH"
 unalias g16 2>/dev/null || true
 unset -f g16
 hash -r
 
-nh2() {
-    local job="${1:-}" input="${2:-}" output reference
-    if [[ $# != 2 || ( $job != guess && $job != alter ) || $input != ?*.inp ]]; then
-        printf '%s\n' '사용법: nh2 guess <파일명.inp> 또는 nh2 alter <파일명.inp>' >&2
-        return 2
+PS1='[\u@lion \W]\$ '
+_nh2_workspaces="$HOME/.local/share/dft-nh2/workspaces"
+mkdir -p -- "$_nh2_workspaces" || exit 1
+printf '%s\n' 'Lion NH₂ 실습 (WSL 모의 환경)'
+while IFS= read -r -p '실습 디렉터리 이름 [nh2]: ' _nh2_name; do
+    _nh2_name=${_nh2_name:-nh2}
+    case $_nh2_name in
+        .|..|*/*)
+            printf '%s\n' '경로 없이 디렉터리 이름만 입력하세요.' >&2
+            continue
+            ;;
+    esac
+    _nh2_workspace="$_nh2_workspaces/$_nh2_name"
+    if [[ -L $_nh2_workspace ]]; then
+        printf '%s\n' '다른 디렉터리 이름을 사용하세요.' >&2
+        continue
     fi
-    output="${input%.inp}.out"
-    reference="$_nh2_dir/data/nh2-$job.inp"
-    if [[ ! -e $input && ! -L $input ]]; then
-        if [[ $job == guess ]]; then
-            printf '%s\n' 'vi에서 전하와 다중도 TODO를 0 2로 수정하세요.'
-            (set -o noclobber; sed 's/^0 2$/TODO/' "$reference" > "$input") || return
-        else
-            printf '%s\n' 'vi에서 β 교환 쌍 TODO를 4 5로 수정하세요. 앞의 α 빈 줄을 유지하세요.'
-            (set -o noclobber; sed 's/^4 5$/TODO/' "$reference" > "$input") || return
-        fi
+    if mkdir -p -- "$_nh2_workspace" && cd -- "$_nh2_workspace"; then
+        unset _nh2_dir _nh2_workspaces _nh2_name _nh2_workspace
+        return 0
     fi
-    vi -- "$input" || return
-    printf 'g16 < %q > %q\n' "$input" "$output"
-    g16 < "$input" > "$output" || return
-    printf '출력 열기: %s (종료: q)\n' "$output"
-    less -- "$output"
-}
-
-printf '%s\n' 'NH₂ 실습 셸 | nh2 guess <파일명.inp> 또는 nh2 alter <파일명.inp> | 종료: exit'
+done
+exit 0
