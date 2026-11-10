@@ -1,4 +1,4 @@
-%oldchk=nh2-opt-freq-bb-read.chk
+%oldchk=nh2-opt-freq-bb.chk
 %chk=nh2-opt-freq-bb-alter.chk
 %CPU=0-1
 %mem=1GB

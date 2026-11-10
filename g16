@@ -31,14 +31,14 @@ SINGLE_POINT_ROUTES = {
     frozenset(ANALYSIS | {"guess=read"}): "scf",
 }
 PREREQUISITES = {
-    "freq": "opt",
-    "spe": "freq",
-    "read-bb": "spe",
-    "alter": "read-bb",
-    "stable": "alter",
-    "read": "opt",
-    "swap": "opt",
-    "scf": "swap",
+    "freq": ("opt",),
+    "spe": ("freq",),
+    "read-bb": ("spe",),
+    "alter": ("spe", "read-bb"),
+    "stable": ("alter",),
+    "read": ("opt",),
+    "swap": ("opt",),
+    "scf": ("swap",),
 }
 COURSE_BASES = dict.fromkeys(("spe", "read-bb", "alter", "stable"), "def2tzvpp")
 COURSE_BASES["freq"] = "def2svp"
@@ -132,10 +132,11 @@ def validate(source):
         raise ValueError("Remove extra input after the final blank line.")
     if oldchk:
         prior_basis = "def2svp" if step == "spe" else basis
-        prior_step = PREREQUISITES[step]
-        expected = f"{CHECKPOINT}\n{prior_basis} {prior_step}\n".encode()
-        if not matches_checkpoint(checkpoint_path(oldchk), expected):
-            raise ValueError(f"%oldchk must be the {prior_basis} {prior_step} lesson checkpoint.")
+        prior_steps = PREREQUISITES[step]
+        path = checkpoint_path(oldchk)
+        if not any(matches_checkpoint(path, checkpoint_marker(prior_basis, prior)) for prior in prior_steps):
+            allowed = "BB or Read Only" if step == "alter" else " or ".join(prior_steps)
+            raise ValueError(f"%oldchk must be the {prior_basis} {allowed} lesson checkpoint.")
     return basis, step, chk, reference
 
 
@@ -186,9 +187,13 @@ def matches_checkpoint(path, marker):
     return False
 
 
+def checkpoint_marker(basis, step):
+    return f"{CHECKPOINT}\n{basis} {step}\n".encode()
+
+
 def save_checkpoint(chk, basis, step):
     chk = checkpoint_path(chk)
-    marker = f"{CHECKPOINT}\n{basis} {step}\n".encode()
+    marker = checkpoint_marker(basis, step)
     with tempfile.TemporaryDirectory(dir=".") as stage:
         path = Path(stage) / "checkpoint"
         path.write_bytes(marker)

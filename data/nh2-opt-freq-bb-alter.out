@@ -1,7 +1,7 @@
  Entering Gaussian System, Link 0=g16
  Initial command:
- /opt/gaussian/g16/l1.exe "/scratch/tutorial/Gau-329022.inp" -scrdir="/scratch/tutorial/"
- Entering Link 1 = /opt/gaussian/g16/l1.exe PID=    329024.
+ /opt/gaussian/g16/l1.exe "/scratch/tutorial/Gau-330855.inp" -scrdir="/scratch/tutorial/"
+ Entering Link 1 = /opt/gaussian/g16/l1.exe PID=    330857.
   
  Copyright (c) 1988-2017, Gaussian, Inc.  All Rights Reserved.
   
@@ -76,14 +76,14 @@
  Gaussian 16:  ES64L-G16RevB.01 20-Dec-2017
                 10-Nov-2026 
  ******************************************
- %oldchk=nh2-opt-freq-bb-read.chk
+ %oldchk=nh2-opt-freq-bb.chk
  %chk=nh2-opt-freq-bb-alter.chk
  %CPU=0-1
  SetSPE:  set environment variable "MP_BIND" = "yes"
  SetSPE:  set environment variable "MP_BLIST" = "0,1"
  Will use up to    2 processors via shared memory.
  %mem=1GB
- Copying data from "nh2-opt-freq-bb-read.chk" to current chk file "nh2-opt-freq-bb-alter.chk"
+ Copying data from "nh2-opt-freq-bb.chk" to current chk file "nh2-opt-freq-bb-alter.chk"
  IOpt=  2 FromEx=T IUOpen= 4 IOptOp= 5 NList=   0 IFRang= 0 IUIn= 4 IUOut= 2.
  ----------------------------------------------------------------
  #p UB3LYP/def2TZVPP SP Geom=AllCheck Guess=(Read,Alter) Pop=Full
@@ -95,7 +95,7 @@
  5/5=2,38=6/2;
  6/7=3,28=1/1;
  99/5=1,9=1/99;
- Leave Link    1 at Tue Nov 10 09:37:15 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.1
+ Leave Link    1 at Tue Nov 10 15:43:03 2026, MaxMem=   134217728 cpu:               0.2 elap:               0.2
  (Enter /opt/gaussian/g16/l101.exe)
  Structure from the checkpoint file:  "nh2-opt-freq-bb-alter.chk"
  -------------------------------------
@@ -133,7 +133,7 @@
  NQMom=    2.0440000   0.0000000   0.0000000
  NMagM=    0.4037610   2.7928460   2.7928460
  AtZNuc=   7.0000000   1.0000000   1.0000000
- Leave Link  101 at Tue Nov 10 09:37:15 2026, MaxMem=   134217728 cpu:               0.2 elap:               0.1
+ Leave Link  101 at Tue Nov 10 15:43:03 2026, MaxMem=   134217728 cpu:               0.2 elap:               0.1
  (Enter /opt/gaussian/g16/l202.exe)
                           Input orientation:                          
  ---------------------------------------------------------------------
@@ -166,7 +166,7 @@
       3          1           0        0.000000   -0.801595   -0.512058
  ---------------------------------------------------------------------
  Rotational constants (GHZ):         661.7270361         390.2043719         245.4616152
- Leave Link  202 at Tue Nov 10 09:37:15 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
+ Leave Link  202 at Tue Nov 10 15:43:03 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
  (Enter /opt/gaussian/g16/l301.exe)
  Standard basis: def2TZVPP (5D, 7F)
  Ernie: Thresh=  0.10000D-02 Tol=  0.10000D-05 Strict=F.
@@ -188,7 +188,7 @@
  Integral buffers will be    131072 words long.
  Raffenetti 2 integral format.
  Two-electron integral symmetry is turned on.
- Leave Link  301 at Tue Nov 10 09:37:15 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.0
+ Leave Link  301 at Tue Nov 10 15:43:03 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.0
  (Enter /opt/gaussian/g16/l302.exe)
  NPDir=0 NMtPBC=     1 NCelOv=     1 NCel=       1 NClECP=     1 NCelD=      1
          NCelK=      1 NCelE2=     1 NClLst=     1 CellRange=     0.0.
@@ -203,10 +203,10 @@
  IXCGrd= 4 IRadAn=           5 IRanWt=          -1 IRanGd=           0 AccXCQ= 0.00D+00.
  Generated NRdTot=       0 NPtTot=           0 NUsed=           0 NTot=          32
  NSgBfM=    66    66    66    66    66 MxSgAt=     3 MxSgA2=     3.
- Leave Link  302 at Tue Nov 10 09:37:15 2026, MaxMem=   134217728 cpu:               0.2 elap:               0.1
+ Leave Link  302 at Tue Nov 10 15:43:03 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.1
  (Enter /opt/gaussian/g16/l303.exe)
  DipDrv:  MaxL=1.
- Leave Link  303 at Tue Nov 10 09:37:15 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
+ Leave Link  303 at Tue Nov 10 15:43:04 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
  (Enter /opt/gaussian/g16/l401.exe)
  Initial guess from the checkpoint file:  "nh2-opt-freq-bb-alter.chk"
  B after Tr=     0.000000    0.000000    0.000000
@@ -235,7 +235,7 @@
                  (A2) (B2) (A1) (B2) (A1)
  The electronic state of the initial guess is 2-A1.
  Initial guess <Sx>= 0.0000 <Sy>= 0.0000 <Sz>= 0.5000 <S**2>= 0.7715 S= 0.5107
- Leave Link  401 at Tue Nov 10 09:37:15 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.1
+ Leave Link  401 at Tue Nov 10 15:43:04 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.1
  (Enter /opt/gaussian/g16/l502.exe)
  Keep R1 and R2 ints in memory in symmetry-blocked form, NReq=3531222.
  FoFCou: FMM=F IPFlag=           0 FMFlag=           0 FMFlg1=           0
@@ -267,9 +267,9 @@
  RMSDP=2.09D-03 MaxDP=5.59D-02              OVMax= 6.87D-02
 
  Cycle   2  Pass 1  IDiag  1:
- E= -55.8160944405125     Delta-E=       -0.003799363153 Rises=F Damp=T
+ E= -55.8160944405126     Delta-E=       -0.003799363153 Rises=F Damp=T
  DIIS: error= 1.94D-02 at cycle   2 NSaved=   2.
- NSaved= 2 IEnMin= 2 EnMin= -55.8160944405125     IErMin= 2 ErrMin= 1.94D-02
+ NSaved= 2 IEnMin= 2 EnMin= -55.8160944405126     IErMin= 2 ErrMin= 1.94D-02
  ErrMax= 1.94D-02  0.00D+00 EMaxC= 1.00D-01 BMatC= 3.00D-02 BMatP= 5.91D-02
  IDIUse=3 WtCom= 8.06D-01 WtEn= 1.94D-01
  Coeff-Com: -0.189D+01 0.289D+01
@@ -280,9 +280,9 @@
  RMSDP=1.30D-03 MaxDP=3.49D-02 DE=-3.80D-03 OVMax= 2.88D-02
 
  Cycle   3  Pass 1  IDiag  1:
- E= -55.8265101610050     Delta-E=       -0.010415720492 Rises=F Damp=F
+ E= -55.8265101610051     Delta-E=       -0.010415720493 Rises=F Damp=F
  DIIS: error= 6.14D-03 at cycle   3 NSaved=   3.
- NSaved= 3 IEnMin= 3 EnMin= -55.8265101610050     IErMin= 3 ErrMin= 6.14D-03
+ NSaved= 3 IEnMin= 3 EnMin= -55.8265101610051     IErMin= 3 ErrMin= 6.14D-03
  ErrMax= 6.14D-03  0.00D+00 EMaxC= 1.00D-01 BMatC= 2.75D-03 BMatP= 3.00D-02
  IDIUse=3 WtCom= 9.39D-01 WtEn= 6.14D-02
  Coeff-Com: -0.793D+00 0.106D+01 0.729D+00
@@ -379,7 +379,7 @@
  KE= 5.552440290737D+01 PE=-1.455797376430D+02 EE= 2.675599158008D+01
  Annihilation of the first spin contaminant:
  S**2 before annihilation     0.7524,   after     0.7500
- Leave Link  502 at Tue Nov 10 09:37:16 2026, MaxMem=   134217728 cpu:               1.0 elap:               0.6
+ Leave Link  502 at Tue Nov 10 15:43:04 2026, MaxMem=   134217728 cpu:               1.0 elap:               0.6
  (Enter /opt/gaussian/g16/l601.exe)
  Copying SCF densities to generalized density rwf, IOpCl= 1 IROHF=0.
 
@@ -3195,13 +3195,13 @@
  XXYZ=              0.0000 YYXZ=              0.0000 ZZXY=              0.0000
  N-N= 7.472152755116D+00 E-N=-1.455797360468D+02  KE= 5.552440290737D+01
  Symmetry A1   KE= 4.958131126340D+01
- Symmetry A2   KE= 6.286116796187D-21
+ Symmetry A2   KE= 1.451632595256D-31
  Symmetry B1   KE= 3.250632808237D+00
  Symmetry B2   KE= 2.692458835739D+00
  Symmetry A1   SP= 1.000000000000D+00
- Symmetry A2   SP= 4.193969995134D-22
- Symmetry B1   SP= 4.675055659672D-15
- Symmetry B2   SP=-5.876202904056D-15
+ Symmetry A2   SP=-6.006237973289D-23
+ Symmetry B1   SP=-1.434311773935D-15
+ Symmetry B2   SP= 3.482416796536D-15
  Orbital energies and kinetic energies (alpha):
                                  1                 2
    1         (A1)--O         -14.344733         22.018907
@@ -3368,7 +3368,7 @@
  ---------------------------------------------------------------------------------
 
  No NMR shielding tensors so no spin-rotation constants.
- Leave Link  601 at Tue Nov 10 09:37:16 2026, MaxMem=   134217728 cpu:               0.3 elap:               0.1
+ Leave Link  601 at Tue Nov 10 15:43:04 2026, MaxMem=   134217728 cpu:               0.3 elap:               0.1
  (Enter /opt/gaussian/g16/l9999.exe)
  1\1\GINC-TUTORIAL\SP\UB3LYP\def2TZVPP\H2N1(2)\TUTORIAL\10-Nov-2026\4\\#p U
  B3LYP/def2TZVPP SP Geom=AllCheck Guess=(Read,Alter) Pop=Full\\NH2 radi
@@ -3380,14 +3380,9 @@
  V(H2)]\\@
 
 
- TIME IS IN FACT THE HERO OF THE PLOT. THE TIME
- WITH WHICH WE HAVE TO DEAL IS OF THE ORDER OF TWO
- BILLION YEARS...GIVEN SO MUCH TIME, THE "IMPOSSIBLE"
- BECOMES POSSIBLE, THE POSSIBLE PROBABLE, THE PROBABLE
- VIRTUALLY CERTAIN.  ONE HAS ONLY TO WAIT, TIME
- ITSELF PERFORMS THE MIRACLES.
- "ORIGIN OF LIFE" LECTURES, GEORGE WALD, 1954
+ Happiness is a conscious choice, not an automatic response.
+ -- Mildred Barthel
  Job cpu time:       0 days  0 hours  0 minutes  2.2 seconds.
- Elapsed time:       0 days  0 hours  0 minutes  1.3 seconds.
+ Elapsed time:       0 days  0 hours  0 minutes  1.4 seconds.
  File lengths (MBytes):  RWF=      6 Int=      0 D2E=      0 Chk=      2 Scr=      1
- Normal termination of Gaussian 16 at Tue Nov 10 09:37:16 2026.
+ Normal termination of Gaussian 16 at Tue Nov 10 15:43:05 2026.

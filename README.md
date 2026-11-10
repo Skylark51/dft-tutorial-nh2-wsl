@@ -1,16 +1,16 @@
 # NH₂ 라디칼 WSL 실습
 
-[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.6.0/NH2-WSL-Manual.hwpx)
+[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.6.1/NH2-WSL-Manual.hwpx)
 
 ## 설치
 
 Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.6.0/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.6.1/install-dft-nh2.sh)
 ```
 
-실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.6.0/activate -i`를 실행합니다.
+실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.6.1/activate -i`를 실행합니다.
 
 실습 디렉터리에서 `ls`를 실행하면 NH₂의 시작 구조인 `nh2.xyz`가 보입니다. `cat nh2.xyz`로 좌표(Å)를 확인할 수 있습니다.
 
@@ -97,7 +97,7 @@ g16 < nh2-opt-freq-bb.inp > nh2-opt-freq-bb.out
 
 Freq는 Opt의 `Opt`를 `Freq`로 바꾸고 `Pop=Full`을 유지합니다. `Geom=AllCheck Guess=Read`와 `%oldchk`로 최적화된 구조와 파동함수를 읽으므로 제목·전하·다중도·좌표는 반복하지 않습니다. BB는 Freq의 체크포인트를 읽고 구조를 고정합니다. `BB`는 실습 파일명 접미사이며 Gaussian의 기본 계산이 단일점이므로 route에서 `SP`를 생략할 수 있습니다. `Pop=Full`을 추가하면 상세 오비탈 출력이 제공됩니다.
 
-## 2. Read Only · BB 오비탈 점유 확인
+## 2. Read Only · BB 오비탈 점유 확인 (선택)
 
 ```text
 %oldchk=nh2-opt-freq-bb.chk
@@ -116,8 +116,10 @@ g16 < nh2-opt-freq-bb-read.inp > nh2-opt-freq-bb-read.out
 
 ## 3. Read Alter · β 4 ↔ 5 교환
 
+BB에서 `Pop=Full`로 β 오비탈 번호를 확인했다면 Read Only 단계는 건너뛰고, Alter의 `%oldchk`에 BB 체크포인트를 바로 지정할 수 있습니다. Read Only를 실행한 경우 그 체크포인트도 사용할 수 있습니다. 입력·출력 파일명과 체크포인트의 접미사는 자유롭게 정합니다. 예를 들어 `nh2-opt-freq-bb-pop.chk`도 사용할 수 있으며, 다음 입력의 `%oldchk`에는 실제 저장한 이름을 적습니다.
+
 ```text
-%oldchk=nh2-opt-freq-bb-read.chk
+%oldchk=nh2-opt-freq-bb.chk
 %chk=nh2-opt-freq-bb-alter.chk
 %CPU=0-1
 %mem=1GB
@@ -169,7 +171,7 @@ nh2-orbitals
 
 ## 별도 예제 · 기저별 오비탈 교환
 
-각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.6.0/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
+각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.6.1/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
 
 | 단계 | def2SVP 예시 파일명 | Route에 추가할 항목 |
 |---|---|---|
