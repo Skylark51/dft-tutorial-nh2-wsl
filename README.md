@@ -1,16 +1,16 @@
 # NH₂ 라디칼 WSL 실습
 
-[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.6.1/NH2-WSL-Manual.hwpx)
+[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.6.2/NH2-WSL-Manual.hwpx)
 
 ## 설치
 
 Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.6.1/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.6.2/install-dft-nh2.sh)
 ```
 
-실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.6.1/activate -i`를 실행합니다.
+실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.6.2/activate -i`를 실행합니다.
 
 실습 디렉터리에서 `ls`를 실행하면 NH₂의 시작 구조인 `nh2.xyz`가 보입니다. `cat nh2.xyz`로 좌표(Å)를 확인할 수 있습니다.
 
@@ -155,6 +155,29 @@ g16 < nh2-opt-freq-bb-stable.inp > nh2-opt-freq-bb-stable.out
 
 같은 구조와 def2TZVPP 기저에서 ²B₁ BB 에너지는 −55.9064118524 Eh, 교환 후 ²A₁ 에너지는 −55.8271904005 Eh입니다. 차이는 0.0792214519 Eh(2.1557 eV)입니다.
 
+### 선택 · Stable=Opt로 파동함수 재최적화
+
+Alter 체크포인트 또는 직전에 진단한 Stable 체크포인트를 읽습니다. 이 예제의 `Geom=Check`는 제목과 `0 2`를 요구합니다. 핵 좌표는 그대로 두고 파동함수를 재최적화합니다.
+
+```text
+%oldchk=nh2-opt-freq-bb-alter.chk
+%chk=nh2-opt-freq-bb-stable-opt.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2TZVPP Guess=Read Geom=Check Pop=Full Stable=Opt
+
+NH2 wavefunction stability optimization
+
+0 2
+
+```
+
+```bash
+g16 < nh2-opt-freq-bb-stable-opt.inp > nh2-opt-freq-bb-stable-opt.out
+```
+
+`/internal instability`, `/SCF Done`, `/stable under the perturbations`, `/The electronic state is`를 검색합니다. 라이온에서는 초기 ²A₁(−55.8271904005 Eh)에서 내부 불안정성이 검출된 뒤 최종 ²B₁(−55.9064118526 Eh)로 돌아갔고, 다시 검사했을 때 고려한 섭동에 대해 안정했습니다.
+
 ## 실습 셸에서 HOMO 보기
 
 ```bash
@@ -171,7 +194,7 @@ nh2-orbitals
 
 ## 별도 예제 · 기저별 오비탈 교환
 
-각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.6.1/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
+각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.6.2/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
 
 | 단계 | def2SVP 예시 파일명 | Route에 추가할 항목 |
 |---|---|---|

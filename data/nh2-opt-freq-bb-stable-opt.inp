@@ -1,0 +1,10 @@
+%oldchk=nh2-opt-freq-bb-alter.chk
+%chk=nh2-opt-freq-bb-stable-opt.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2TZVPP Guess=Read Geom=Check Pop=Full Stable=Opt
+
+NH2 wavefunction stability optimization
+
+0 2
+

@@ -21,6 +21,7 @@ ROUTES = {
     frozenset(("freq", "pop=full", "geom=allcheck", "guess=read")): "freq",
     frozenset(("geom=allcheck", "guess=(read,only)", "pop=full")): "read-bb",
     frozenset(("stable", "geom=allcheck", "guess=read", "pop=full")): "stable",
+    frozenset(("stable=opt", "geom=allcheck", "guess=read", "pop=full")): "stable-opt",
     frozenset(ANALYSIS | {"guess=(read,only)"}): "read",
     frozenset(ANALYSIS | {"guess=(read,only,alter,save)"}): "swap",
 }
@@ -36,17 +37,19 @@ PREREQUISITES = {
     "read-bb": ("spe",),
     "alter": ("spe", "read-bb"),
     "stable": ("alter",),
+    "stable-opt": ("alter", "stable"),
     "read": ("opt",),
     "swap": ("opt",),
     "scf": ("swap",),
 }
-COURSE_BASES = dict.fromkeys(("spe", "read-bb", "alter", "stable"), "def2tzvpp")
+COURSE_BASES = dict.fromkeys(("spe", "read-bb", "alter", "stable", "stable-opt"), "def2tzvpp")
 COURSE_BASES["freq"] = "def2svp"
 COURSE_REFERENCES = {
     "spe": "nh2-opt-freq-bb",
     "read-bb": "nh2-opt-freq-bb-read",
     "alter": "nh2-opt-freq-bb-alter",
     "stable": "nh2-opt-freq-bb-stable",
+    "stable-opt": "nh2-opt-freq-bb-stable-opt",
 }
 CHECKPOINT = "NH2 WSL tutorial checkpoint"
 CHECKPOINT_NAME = r"[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*\.[cC][hH][kK]"

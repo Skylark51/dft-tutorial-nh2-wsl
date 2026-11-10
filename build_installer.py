@@ -22,6 +22,7 @@ jobs = [
     "nh2-opt-freq-bb-read",
     "nh2-opt-freq-bb-alter",
     "nh2-opt-freq-bb-stable",
+    "nh2-opt-freq-bb-stable-opt",
     "nh2-def2svp-freq",
 ]
 jobs.extend(
@@ -50,7 +51,7 @@ set -euo pipefail
 command -v python3 >/dev/null || { echo 'Install python3 in WSL first.' >&2; exit 1; }
 command -v vi >/dev/null || { echo 'Install vi in WSL first.' >&2; exit 1; }
 root="$HOME/.local/share/dft-nh2"
-target="$root/v1.6.1"
+target="$root/v1.6.2"
 mkdir -p -- "$root"
 if [[ ! -f "$target/activate" ]]; then (
 stage=$(mktemp -d "$root/.dft-nh2.XXXXXXXX")
