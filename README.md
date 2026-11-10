@@ -1,20 +1,88 @@
-# NH₂ 오비탈 교환 WSL 실습
+# NH₂ 라디칼 WSL 실습
 
-[학생용 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.3.0/NH2-WSL-Manual.hwpx)
+[Opt · Freq · SPE 학생용 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.4.0/NH2-WSL-Opt-Freq-SPE.hwpx)
 
 ## 설치
 
 Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.3.0/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.4.0/install-dft-nh2.sh)
 ```
 
-실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.3.0/activate -i`를 실행합니다.
+실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.4.0/activate -i`를 실행합니다.
 
-## 실습
+## 첫 실습 · Opt → Freq → SPE
 
-각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.3.0/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
+중성 NH₂ 이중항(전하 0, 다중도 2)을 UB3LYP/def2SVP로 최적화합니다. 같은 기저로 진동수를 확인한 뒤, 그 구조에서 UB3LYP/def2TZVPP 단일점 에너지를 계산합니다.
+
+각 입력은 `vi 파일명.inp`로 열어 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 각 코드 블록의 마지막 줄 뒤에는 빈 줄을 한 줄 둡니다. 명령을 실행하면 약 5초 뒤 출력이 `vi`에서 열립니다. `/검색어`와 Enter로 확인하고 `:q`로 닫습니다.
+
+### 1. Opt · 바닥상태 구조 최적화
+
+```text
+%chk=nh2-def2svp-opt.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2SVP Opt Pop=Full
+
+NH2 radical ground-state optimization
+
+0 2
+N
+H 1 nh
+H 1 nh 2 hnh
+Variables:
+nh 1.03
+hnh 120.0
+
+```
+
+```bash
+g16 < nh2-def2svp-opt.inp > nh2-def2svp-opt.out
+```
+
+검색어 `Optimization completed`. N–H 1.0373 Å, H–N–H 101.2066°, 최종 E = −55.8309531917 Eh.
+
+### 2. Freq · 진동수와 최소점 확인
+
+```text
+%oldchk=nh2-def2svp-opt.chk
+%chk=nh2-def2svp-freq.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2SVP Freq Geom=AllCheck Guess=Read
+
+```
+
+```bash
+g16 < nh2-def2svp-freq.inp > nh2-def2svp-freq.out
+```
+
+검색어 `Frequencies --`. 1531.9485, 3324.1809, 3406.8390 cm⁻¹로 모두 양수입니다.
+
+### 3. SPE · 고정 구조 단일점 에너지
+
+```text
+%oldchk=nh2-def2svp-freq.chk
+%chk=nh2-def2tzvpp-spe.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2TZVPP SP Geom=AllCheck Guess=Read
+
+```
+
+```bash
+g16 < nh2-def2tzvpp-spe.inp > nh2-def2tzvpp-spe.out
+```
+
+검색어 `SCF Done`. 최종 E = −55.9064118524 Eh, 전자 상태는 ²B₁입니다.
+
+`%oldchk`는 직전 단계의 `%chk`와 같아야 합니다. Freq와 SPE의 `Geom=AllCheck`가 앞 단계의 구조와 전하·다중도를 읽습니다. WSL의 `.chk`는 작업 순서를 검사하는 모의 파일이며, `.out`은 라이온 참조 로그입니다.
+
+## 후속 실습 · 오비탈 교환
+
+각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.4.0/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
 
 | 단계 | def2SVP 예시 파일명 | Route에 추가할 항목 |
 |---|---|---|

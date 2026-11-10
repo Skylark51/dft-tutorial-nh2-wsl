@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the two NH2 lesson inputs and replay the matching Gaussian output."""
+"""Validate NH2 lesson inputs and replay the matching Gaussian output."""
 
 import os
 import re
@@ -17,11 +17,14 @@ BASES = {"def2svp", "def2tzvpp"}
 ANALYSIS = {"geom=allcheck", "pop=(full,nbo)", "gfinput", "gfoldprint"}
 ROUTES = {
     frozenset(("opt", "pop=full")): "opt",
+    frozenset(("freq", "geom=allcheck", "guess=read")): "freq",
+    frozenset(("sp", "geom=allcheck", "guess=read")): "spe",
     frozenset(ANALYSIS | {"guess=(read,only)"}): "read",
     frozenset(ANALYSIS | {"guess=(read,only,alter,save)"}): "swap",
     frozenset(ANALYSIS | {"guess=read", "sp"}): "scf",
 }
-PREREQUISITES = {"read": "opt", "swap": "opt", "scf": "swap"}
+PREREQUISITES = {"freq": "opt", "spe": "freq", "read": "opt", "swap": "opt", "scf": "swap"}
+STARTER_BASES = {"freq": "def2svp", "spe": "def2tzvpp"}
 CHECKPOINT = "NH2 WSL tutorial checkpoint"
 CHECKPOINT_NAME = r"[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*\.[cC][hH][kK]"
 LINK0 = {
@@ -68,6 +71,8 @@ def validate(source):
     if not step or len(methods) != 1 or len(words) != len(set(words)):
         raise ValueError("Use one of the UB3LYP/def2SVP or UB3LYP/def2TZVPP lesson routes.")
     basis = methods.pop().split("/")[1]
+    if step in STARTER_BASES and basis != STARTER_BASES[step]:
+        raise ValueError(f"Use UB3LYP/{STARTER_BASES[step]} for the {step.upper()} lesson step.")
     chk = headers.get("chk")
     oldchk = headers.get("oldchk")
     if not chk or bool(oldchk) != (step in PREREQUISITES) or chk == oldchk:
@@ -84,9 +89,11 @@ def validate(source):
     if any(lines):
         raise ValueError("Remove extra input after the final blank line.")
     if oldchk:
-        expected = f"{CHECKPOINT}\n{basis} {PREREQUISITES[step]}\n".encode()
+        prior_basis = "def2svp" if step == "spe" else basis
+        prior_step = PREREQUISITES[step]
+        expected = f"{CHECKPOINT}\n{prior_basis} {prior_step}\n".encode()
         if not matches_checkpoint(oldchk, expected):
-            raise ValueError(f"%oldchk must be the {basis} {PREREQUISITES[step]} lesson checkpoint.")
+            raise ValueError(f"%oldchk must be the {prior_basis} {prior_step} lesson checkpoint.")
     return basis, step, chk
 
 
