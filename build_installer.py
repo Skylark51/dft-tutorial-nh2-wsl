@@ -7,7 +7,7 @@ import tarfile
 
 
 ROOT = Path(__file__).resolve().parent
-FILES = {"g16": "bin/g16", "activate": "activate"}
+FILES = {"g16": "bin/g16", "activate": "activate", "data/nh2.xyz": "data/nh2.xyz"}
 for basis in ("def2svp", "def2tzvpp"):
     starter_step = "freq" if basis == "def2svp" else "spe"
     for step in ("opt", "read", "swap", "scf", starter_step):
@@ -31,7 +31,7 @@ set -euo pipefail
 command -v python3 >/dev/null || { echo 'Install python3 in WSL first.' >&2; exit 1; }
 command -v vi >/dev/null || { echo 'Install vi in WSL first.' >&2; exit 1; }
 root="$HOME/.local/share/dft-nh2"
-target="$root/v1.4.0"
+target="$root/v1.4.1"
 mkdir -p -- "$root"
 if [[ ! -f "$target/activate" ]]; then (
 stage=$(mktemp -d "$root/.dft-nh2.XXXXXXXX")

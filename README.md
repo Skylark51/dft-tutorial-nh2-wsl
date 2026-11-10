@@ -1,16 +1,18 @@
 # NH₂ 라디칼 WSL 실습
 
-[Opt · Freq · SPE 학생용 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.4.0/NH2-WSL-Opt-Freq-SPE.hwpx)
+[Opt · Freq · SPE 학생용 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.4.1/NH2-WSL-Opt-Freq-SPE.hwpx)
 
 ## 설치
 
 Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.4.0/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.4.1/install-dft-nh2.sh)
 ```
 
-실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.4.0/activate -i`를 실행합니다.
+실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.4.1/activate -i`를 실행합니다.
+
+실습 디렉터리에서 `ls`를 실행하면 NH₂의 시작 구조인 `nh2.xyz`가 보입니다. `cat nh2.xyz`로 좌표(Å)를 확인할 수 있습니다.
 
 ## 첫 실습 · Opt → Freq → SPE
 
@@ -82,7 +84,7 @@ g16 < nh2-def2tzvpp-spe.inp > nh2-def2tzvpp-spe.out
 
 ## 후속 실습 · 오비탈 교환
 
-각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.4.0/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
+각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.4.1/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
 
 | 단계 | def2SVP 예시 파일명 | Route에 추가할 항목 |
 |---|---|---|

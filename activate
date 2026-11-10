@@ -23,6 +23,11 @@ while IFS= read -r -p '실습 디렉터리 이름 [nh2]: ' _nh2_name; do
         continue
     fi
     if mkdir -p -- "$_nh2_workspace" && cd -- "$_nh2_workspace"; then
+        if [[ ! -e nh2.xyz && ! -L nh2.xyz ]] &&
+            ! cp --no-clobber -- "$_nh2_dir/data/nh2.xyz" nh2.xyz &&
+            [[ ! -e nh2.xyz && ! -L nh2.xyz ]]; then
+            exit 1
+        fi
         unset _nh2_dir _nh2_workspaces _nh2_name _nh2_workspace
         return 0
     fi
