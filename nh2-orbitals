@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""View signed NH2 orbital isosurfaces in the WSL terminal."""
+
+import curses
+import gzip
+import json
+import math
+import sys
+from pathlib import Path
+
+
+DATA = Path(__file__).resolve().parent.parent / "data/orbital-surfaces.json.gz"
+LABELS = (
+    "1  Before  2-B1   beta HOMO (#4, A1)",
+    "2  After   2-A1   beta HOMO (#4, B1)",
+    "3  Before  2-B1   alpha HOMO (#5, B1)",
+    "4  After   2-A1   alpha HOMO (#5, B1)",
+    "5  After   2-A1   alpha singly occupied A1 (#4)",
+)
+START_ANGLE = (0.55, 0.48)
+
+
+def rotation(yaw, pitch):
+    cy, sy, cx, sx = math.cos(yaw), math.sin(yaw), math.cos(pitch), math.sin(pitch)
+
+    def rotate(x, y, z):
+        horizontal = cy * x + sy * z
+        depth = -sy * x + cy * z
+        return horizontal, cx * y - sx * depth, sx * y + cx * depth
+
+    return rotate
+
+
+def render(screen, data, radius, selection, yaw, pitch, colored):
+    height, width = screen.getmaxyx()
+    screen.erase()
+    if height < 17 or width < 52:
+        screen.addnstr(0, 0, "Resize to at least 52 columns x 17 rows. q quits.", max(0, width - 1))
+        screen.refresh()
+        return
+    screen.addstr(0, 2, "NH2 RADICAL | ORBITALS", curses.A_BOLD)
+    screen.addstr(1, 2, LABELS[selection])
+    screen.addstr(2, 2, f"Isosurface +/-{data['isovalue']:.2f} | Lion UB3LYP/def2TZVPP")
+    screen.addstr(height - 3, 2, "1/2 beta HOMO   3/4 alpha HOMO   5 alpha A1")
+    screen.addstr(height - 2, 2, "Arrows or hjkl: rotate   r: reset   q: quit")
+    screen.addstr(height - 1, 2, "+ phase", curses.color_pair(1) if colored else 0)
+    screen.addstr(height - 1, 12, "- phase", curses.color_pair(2) if colored else 0)
+    screen.addstr(height - 1, 23, "N/H = atom centers")
+
+    panel = data["panels"][selection]
+    rotate = rotation(yaw, pitch)
+    top, bottom = 4, height - 5
+    scale = min((width - 8) / 2, bottom - top) / radius
+    middle = (top + bottom) / 2
+    pixels = {}
+    for phase, surface in enumerate(("positive", "negative"), start=1):
+        for x, y, z, nx, ny, nz in panel[surface]:
+            px, py, depth = rotate(x, y, z)
+            cell = (round(middle - py * scale / 2), round(width / 2 + px * scale))
+            if cell not in pixels or depth > pixels[cell][0]:
+                light_x, light_y, light_z = rotate(nx, ny, nz)
+                light = 0.75 * light_z - 0.35 * light_x + 0.45 * light_y
+                pixels[cell] = depth, phase, light
+    for (row, col), (_, phase, light) in pixels.items():
+        if colored:
+            shade = max(0, min(3, int((light + 1) * 2)))
+            screen.addstr(row, col, "░▒▓█"[shade], curses.color_pair(phase))
+        else:
+            screen.addstr(row, col, "+" if phase == 1 else "-")
+    for number, x, y, z in panel["atoms"]:
+        px, py, _ = rotate(x, y, z)
+        screen.addstr(
+            round(middle - py * scale / 2), round(width / 2 + px * scale),
+            "N" if number == 7 else "H", curses.A_BOLD | curses.A_REVERSE,
+        )
+    screen.refresh()
+
+
+def interact(screen, data):
+    try:
+        curses.curs_set(0)
+    except curses.error:
+        pass
+    colored = curses.has_colors()
+    if colored:
+        curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+    radius = max(
+        math.sqrt(x * x + y * y + z * z)
+        for panel in data["panels"]
+        for phase in ("positive", "negative")
+        for x, y, z, *_ in panel[phase]
+    )
+    selection = 0
+    yaw, pitch = START_ANGLE
+    while True:
+        render(screen, data, radius, selection, yaw, pitch, colored)
+        key = screen.getch()
+        if key in (ord("q"), 27):
+            return
+        if ord("1") <= key <= ord("5"):
+            selection = key - ord("1")
+        elif key in (curses.KEY_LEFT, ord("h")):
+            yaw -= 0.2
+        elif key in (curses.KEY_RIGHT, ord("l")):
+            yaw += 0.2
+        elif key in (curses.KEY_UP, ord("k")):
+            pitch += 0.2
+        elif key in (curses.KEY_DOWN, ord("j")):
+            pitch -= 0.2
+        elif key == ord("r"):
+            yaw, pitch = START_ANGLE
+
+
+def main():
+    if sys.argv[1:] == ["--help"]:
+        print("nh2-orbitals: compare the NH2 orbital shapes. Keys: 1–5, arrows, r, q.")
+        return
+    if len(sys.argv) != 1 or not (sys.stdin.isatty() and sys.stdout.isatty()):
+        raise SystemExit("Run nh2-orbitals from the interactive WSL lesson shell.")
+    with gzip.open(DATA, "rt", encoding="utf-8") as source:
+        data = json.load(source)
+    curses.wrapper(interact, data)
+
+
+if __name__ == "__main__":
+    main()

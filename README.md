@@ -1,16 +1,16 @@
 # NH₂ 라디칼 WSL 실습
 
-[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.5.3/NH2-WSL-Manual.hwpx)
+[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.6.0/NH2-WSL-Manual.hwpx)
 
 ## 설치
 
 Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.5.3/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.6.0/install-dft-nh2.sh)
 ```
 
-실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.5.3/activate -i`를 실행합니다.
+실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.6.0/activate -i`를 실행합니다.
 
 실습 디렉터리에서 `ls`를 실행하면 NH₂의 시작 구조인 `nh2.xyz`가 보입니다. `cat nh2.xyz`로 좌표(Å)를 확인할 수 있습니다.
 
@@ -153,9 +153,23 @@ g16 < nh2-opt-freq-bb-stable.inp > nh2-opt-freq-bb-stable.out
 
 같은 구조와 def2TZVPP 기저에서 ²B₁ BB 에너지는 −55.9064118524 Eh, 교환 후 ²A₁ 에너지는 −55.8271904005 Eh입니다. 차이는 0.0792214519 Eh(2.1557 eV)입니다.
 
+## 실습 셸에서 HOMO 보기
+
+```bash
+nh2-orbitals
+```
+
+- `1` · 교환 전 ²B₁의 β HOMO (4번 A₁)
+- `2` · 교환 후 ²A₁의 β HOMO (4번 B₁)
+- `3` / `4` · 교환 전후의 α HOMO (5번 B₁)
+- `5` · 교환 후 ²A₁의 단일 점유 α A₁ (4번)
+- 방향키 또는 `h j k l` · 회전. `r` · 시점 초기화. `q` · 실습 셸로 돌아가기.
+
+라이온의 BB 및 Alter 체크포인트에서 `formchk`와 `cubegen`으로 생성한 자료를 등치값 ±0.02에서 표시합니다. 두 색은 오비탈 파동함수의 위상을 나타냅니다. 뷰어는 설치본의 참조 자료를 사용하므로 실습용 `.chk` 파일이나 추가 접속이 필요 없습니다.
+
 ## 별도 예제 · 기저별 오비탈 교환
 
-각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.5.3/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
+각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.6.0/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
 
 | 단계 | def2SVP 예시 파일명 | Route에 추가할 항목 |
 |---|---|---|

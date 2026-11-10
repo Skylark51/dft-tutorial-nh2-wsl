@@ -7,7 +7,13 @@ import tarfile
 
 
 ROOT = Path(__file__).resolve().parent
-FILES = {"g16": "bin/g16", "activate": "activate", "data/nh2.xyz": "data/nh2.xyz"}
+FILES = {
+    "g16": "bin/g16",
+    "nh2-orbitals": "bin/nh2-orbitals",
+    "activate": "activate",
+    "data/nh2.xyz": "data/nh2.xyz",
+    "data/orbital-surfaces.json.gz": "data/orbital-surfaces.json.gz",
+}
 jobs = [
     "nh2-opt",
     "nh2-opt-freq",
@@ -32,11 +38,11 @@ archive = io.BytesIO()
 with tarfile.open(fileobj=archive, mode="w:gz") as package:
     for name, destination in FILES.items():
         content = (ROOT / name).read_bytes()
-        if name in {"g16", "activate"}:
+        if name in {"g16", "nh2-orbitals", "activate"}:
             content = content.replace(b"\r\n", b"\n")
         entry = tarfile.TarInfo(destination)
         entry.size = len(content)
-        entry.mode = 0o755 if name == "g16" else 0o644
+        entry.mode = 0o755 if destination.startswith("bin/") else 0o644
         package.addfile(entry, io.BytesIO(content))
 
 header = r"""#!/usr/bin/env bash
@@ -44,7 +50,7 @@ set -euo pipefail
 command -v python3 >/dev/null || { echo 'Install python3 in WSL first.' >&2; exit 1; }
 command -v vi >/dev/null || { echo 'Install vi in WSL first.' >&2; exit 1; }
 root="$HOME/.local/share/dft-nh2"
-target="$root/v1.5.3"
+target="$root/v1.6.0"
 mkdir -p -- "$root"
 if [[ ! -f "$target/activate" ]]; then (
 stage=$(mktemp -d "$root/.dft-nh2.XXXXXXXX")
