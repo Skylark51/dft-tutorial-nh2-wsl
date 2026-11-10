@@ -19,13 +19,16 @@ ROUTES = {
     frozenset(("opt", "pop=full")): "opt",
     frozenset(("freq", "geom=allcheck", "guess=read")): "freq",
     frozenset(("freq", "pop=full", "geom=allcheck", "guess=read")): "freq",
-    frozenset(("sp", "geom=allcheck", "guess=read")): "spe",
     frozenset(("geom=allcheck", "guess=(read,only)", "pop=full")): "read-bb",
-    frozenset(("sp", "geom=allcheck", "guess=(read,alter)", "pop=full")): "alter",
     frozenset(("stable", "geom=allcheck", "guess=read", "pop=full")): "stable",
     frozenset(ANALYSIS | {"guess=(read,only)"}): "read",
     frozenset(ANALYSIS | {"guess=(read,only,alter,save)"}): "swap",
-    frozenset(ANALYSIS | {"guess=read", "sp"}): "scf",
+}
+SINGLE_POINT_ROUTES = {
+    frozenset(("geom=allcheck", "guess=read")): "spe",
+    frozenset(("geom=allcheck", "guess=read", "pop=full")): "spe",
+    frozenset(("geom=allcheck", "guess=(read,alter)", "pop=full")): "alter",
+    frozenset(ANALYSIS | {"guess=read"}): "scf",
 }
 PREREQUISITES = {
     "freq": "opt",
@@ -92,9 +95,12 @@ def validate(source):
         for word in words
     ]
     methods = {f"ub3lyp/{basis}" for basis in BASES} & set(words)
-    step = ROUTES.get(frozenset(set(words) - methods))
-    if not step or len(methods) != 1 or len(words) != len(set(words)):
-        raise ValueError("Use one of the UB3LYP/def2SVP or UB3LYP/def2TZVPP lesson routes.")
+    if len(methods) != 1:
+        raise ValueError("The route must specify UB3LYP/def2SVP or UB3LYP/def2TZVPP.")
+    keywords = frozenset(set(words) - methods)
+    step = ROUTES.get(keywords) or SINGLE_POINT_ROUTES.get(keywords - {"sp"})
+    if not step or len(words) != len(set(words)):
+        raise ValueError(f"No matching NH2 lesson step for this route: {route}")
     basis = methods.pop().split("/")[1]
     if step in COURSE_BASES and basis != COURSE_BASES[step]:
         raise ValueError(f"Use UB3LYP/{COURSE_BASES[step]} for the {step.upper()} lesson step.")
@@ -111,6 +117,8 @@ def validate(source):
             reference = "nh2-opt"
     elif step == "freq" and "pop=full" in words:
         reference = "nh2-opt-freq"
+    elif step == "spe" and "pop=full" in words:
+        reference = "nh2-opt-freq-bb-full"
     if geom_check:
         section("Geom=Check requires a title followed by a blank line.")
         charge = section("Geom=Check requires charge and multiplicity (0 2), then a blank line.")

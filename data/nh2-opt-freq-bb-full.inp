@@ -1,0 +1,12 @@
+%chk=nh2-opt-freq-bb-full.chk
+%oldchk=nh2-opt-freq.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2TZVPP Pop=full guess=read geom=check
+
+NH2
+
+0 2
+
+
+

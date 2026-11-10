@@ -12,6 +12,7 @@ jobs = [
     "nh2-opt",
     "nh2-opt-freq",
     "nh2-opt-freq-bb",
+    "nh2-opt-freq-bb-full",
     "nh2-opt-freq-bb-read",
     "nh2-opt-freq-bb-alter",
     "nh2-opt-freq-bb-stable",
@@ -43,7 +44,7 @@ set -euo pipefail
 command -v python3 >/dev/null || { echo 'Install python3 in WSL first.' >&2; exit 1; }
 command -v vi >/dev/null || { echo 'Install vi in WSL first.' >&2; exit 1; }
 root="$HOME/.local/share/dft-nh2"
-target="$root/v1.5.2"
+target="$root/v1.5.3"
 mkdir -p -- "$root"
 if [[ ! -f "$target/activate" ]]; then (
 stage=$(mktemp -d "$root/.dft-nh2.XXXXXXXX")
