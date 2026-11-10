@@ -8,12 +8,24 @@ import tarfile
 
 ROOT = Path(__file__).resolve().parent
 FILES = {"g16": "bin/g16", "activate": "activate", "data/nh2.xyz": "data/nh2.xyz"}
-for basis in ("def2svp", "def2tzvpp"):
-    starter_step = "freq" if basis == "def2svp" else "spe"
-    for step in ("opt", "read", "swap", "scf", starter_step):
-        for extension in ("inp", "out"):
-            name = f"data/nh2-{basis}-{step}.{extension}"
-            FILES[name] = name
+jobs = [
+    "nh2-opt",
+    "nh2-opt-freq",
+    "nh2-opt-freq-bb",
+    "nh2-opt-freq-bb-read",
+    "nh2-opt-freq-bb-alter",
+    "nh2-opt-freq-bb-stable",
+    "nh2-def2svp-freq",
+]
+jobs.extend(
+    f"nh2-{basis}-{step}"
+    for basis in ("def2svp", "def2tzvpp")
+    for step in ("opt", "read", "swap", "scf")
+)
+for job in jobs:
+    for extension in ("inp", "out"):
+        name = f"data/{job}.{extension}"
+        FILES[name] = name
 
 archive = io.BytesIO()
 with tarfile.open(fileobj=archive, mode="w:gz") as package:
@@ -31,7 +43,7 @@ set -euo pipefail
 command -v python3 >/dev/null || { echo 'Install python3 in WSL first.' >&2; exit 1; }
 command -v vi >/dev/null || { echo 'Install vi in WSL first.' >&2; exit 1; }
 root="$HOME/.local/share/dft-nh2"
-target="$root/v1.4.1"
+target="$root/v1.5.0"
 mkdir -p -- "$root"
 if [[ ! -f "$target/activate" ]]; then (
 stage=$(mktemp -d "$root/.dft-nh2.XXXXXXXX")

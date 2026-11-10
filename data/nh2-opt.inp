@@ -1,0 +1,12 @@
+%chk=nh2-opt.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2SVP Opt Pop=Full
+
+NH2 radical ground-state optimization
+
+0 2
+N     0.000000     0.000000     0.000000
+H     0.000000     0.000000     1.030000
+H     0.892006     0.000000    -0.515000
+

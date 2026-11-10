@@ -18,13 +18,33 @@ ANALYSIS = {"geom=allcheck", "pop=(full,nbo)", "gfinput", "gfoldprint"}
 ROUTES = {
     frozenset(("opt", "pop=full")): "opt",
     frozenset(("freq", "geom=allcheck", "guess=read")): "freq",
+    frozenset(("freq", "pop=full", "geom=allcheck", "guess=read")): "freq",
     frozenset(("sp", "geom=allcheck", "guess=read")): "spe",
+    frozenset(("geom=allcheck", "guess=(read,only)", "pop=full")): "read-bb",
+    frozenset(("sp", "geom=allcheck", "guess=(read,alter)", "pop=full")): "alter",
+    frozenset(("stable", "geom=allcheck", "guess=read", "pop=full")): "stable",
     frozenset(ANALYSIS | {"guess=(read,only)"}): "read",
     frozenset(ANALYSIS | {"guess=(read,only,alter,save)"}): "swap",
     frozenset(ANALYSIS | {"guess=read", "sp"}): "scf",
 }
-PREREQUISITES = {"freq": "opt", "spe": "freq", "read": "opt", "swap": "opt", "scf": "swap"}
-STARTER_BASES = {"freq": "def2svp", "spe": "def2tzvpp"}
+PREREQUISITES = {
+    "freq": "opt",
+    "spe": "freq",
+    "read-bb": "spe",
+    "alter": "read-bb",
+    "stable": "alter",
+    "read": "opt",
+    "swap": "opt",
+    "scf": "swap",
+}
+COURSE_BASES = dict.fromkeys(("spe", "read-bb", "alter", "stable"), "def2tzvpp")
+COURSE_BASES["freq"] = "def2svp"
+COURSE_REFERENCES = {
+    "spe": "nh2-opt-freq-bb",
+    "read-bb": "nh2-opt-freq-bb-read",
+    "alter": "nh2-opt-freq-bb-alter",
+    "stable": "nh2-opt-freq-bb-stable",
+}
 CHECKPOINT = "NH2 WSL tutorial checkpoint"
 CHECKPOINT_NAME = r"[a-zA-Z0-9_-]+(?:\.[a-zA-Z0-9_-]+)*\.[cC][hH][kK]"
 LINK0 = {
@@ -71,18 +91,22 @@ def validate(source):
     if not step or len(methods) != 1 or len(words) != len(set(words)):
         raise ValueError("Use one of the UB3LYP/def2SVP or UB3LYP/def2TZVPP lesson routes.")
     basis = methods.pop().split("/")[1]
-    if step in STARTER_BASES and basis != STARTER_BASES[step]:
-        raise ValueError(f"Use UB3LYP/{STARTER_BASES[step]} for the {step.upper()} lesson step.")
+    if step in COURSE_BASES and basis != COURSE_BASES[step]:
+        raise ValueError(f"Use UB3LYP/{COURSE_BASES[step]} for the {step.upper()} lesson step.")
     chk = headers.get("chk")
     oldchk = headers.get("oldchk")
     if not chk or bool(oldchk) != (step in PREREQUISITES) or chk == oldchk:
         raise ValueError("Use %chk for this job and, for Geom=AllCheck, a separate %oldchk.")
 
+    reference = COURSE_REFERENCES.get(step, f"nh2-{basis}-{step}")
     if step == "opt":
         section("Enter a title followed by a blank line.")
-        molecule = section("End the NH2 Z-matrix and its Variables block with a blank line.")
-        validate_geometry(molecule)
-    if step == "swap":
+        molecule = section("End the NH2 molecule specification with a blank line.")
+        if validate_geometry(molecule, basis):
+            reference = "nh2-opt"
+    elif step == "freq" and "pop=full" in words:
+        reference = "nh2-opt-freq"
+    if step in {"swap", "alter"}:
         if len(lines) < 3 or lines[0] or lines[1].split() != ["4", "5"] or lines[2]:
             raise ValueError("After the route's blank line, leave another blank line for alpha, then enter 4 5 and a blank line for beta.")
         del lines[:3]
@@ -94,13 +118,24 @@ def validate(source):
         expected = f"{CHECKPOINT}\n{prior_basis} {prior_step}\n".encode()
         if not matches_checkpoint(oldchk, expected):
             raise ValueError(f"%oldchk must be the {prior_basis} {prior_step} lesson checkpoint.")
-    return basis, step, chk
+    return basis, step, chk, reference
 
 
-def validate_geometry(molecule):
+def validate_geometry(molecule, basis):
     if molecule[0].split() != ["0", "2"]:
         raise ValueError("Use charge 0 and multiplicity 2.")
     geometry = [line.lower().split() for line in molecule[1:]]
+    if basis == "def2svp" and len(geometry) == 3:
+        reference = [line.lower().split() for line in (DATA / "nh2.xyz").read_text().splitlines()[2:]]
+        for row, expected in zip(geometry, reference):
+            if (
+                len(row) != 4
+                or row[0] != expected[0]
+                or any(not re.fullmatch(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)", value) for value in row[1:])
+                or [Decimal(value) for value in row[1:]] != [Decimal(value) for value in expected[1:]]
+            ):
+                raise ValueError("Use the three Cartesian coordinate rows from nh2.xyz.")
+        return True
     if geometry[:4] != [["n"], ["h", "1", "nh"], ["h", "1", "nh", "2", "hnh"], ["variables:"]]:
         raise ValueError("Use the lesson NH2 Z-matrix with Variables:, nh and hnh.")
     values = {}
@@ -110,6 +145,7 @@ def validate_geometry(molecule):
         values[fields[0]] = Decimal(fields[1])
     if values != {"nh": Decimal("1.03"), "hnh": Decimal("120.0")}:
         raise ValueError("Set nh to 1.03 and hnh to 120.0.")
+    return False
 
 
 def matches_checkpoint(chk, marker):
@@ -163,8 +199,8 @@ def main():
         source = sys.stdin.buffer.read(65537)
         if len(source) > 65536:
             raise ValueError("The lesson input exceeds 64 KiB.")
-        basis, step, chk = validate(source.decode("utf-8").replace("\r\n", "\n"))
-        output = (DATA / f"nh2-{basis}-{step}.out").read_bytes()
+        basis, step, chk, reference = validate(source.decode("utf-8").replace("\r\n", "\n"))
+        output = (DATA / f"{reference}.out").read_bytes()
         print("NH₂ 모의 계산 중…", file=sys.stderr, flush=True)
         time.sleep(5)
         save_checkpoint(chk, basis, step)

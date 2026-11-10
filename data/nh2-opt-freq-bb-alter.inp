@@ -1,0 +1,9 @@
+%oldchk=nh2-opt-freq-bb-read.chk
+%chk=nh2-opt-freq-bb-alter.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2TZVPP SP Geom=AllCheck Guess=(Read,Alter) Pop=Full
+
+
+4 5
+

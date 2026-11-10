@@ -1,7 +1,7 @@
  Entering Gaussian System, Link 0=g16
  Initial command:
- /opt/gaussian/g16/l1.exe "/scratch/tutorial/Gau-328193.inp" -scrdir="/scratch/tutorial/"
- Entering Link 1 = /opt/gaussian/g16/l1.exe PID=    328195.
+ /opt/gaussian/g16/l1.exe "/scratch/tutorial/Gau-328533.inp" -scrdir="/scratch/tutorial/"
+ Entering Link 1 = /opt/gaussian/g16/l1.exe PID=    328535.
   
  Copyright (c) 1988-2017, Gaussian, Inc.  All Rights Reserved.
   
@@ -76,14 +76,14 @@
  Gaussian 16:  ES64L-G16RevB.01 20-Dec-2017
                 10-Nov-2026 
  ******************************************
- %oldchk=nh2-def2svp-freq.chk
- %chk=nh2-def2tzvpp-spe.chk
+ %oldchk=nh2-opt-freq.chk
+ %chk=nh2-opt-freq-bb.chk
  %CPU=0-1
  SetSPE:  set environment variable "MP_BIND" = "yes"
  SetSPE:  set environment variable "MP_BLIST" = "0,1"
  Will use up to    2 processors via shared memory.
  %mem=1GB
- Copying data from "nh2-def2svp-freq.chk" to current chk file "nh2-def2tzvpp-spe.chk"
+ Copying data from "nh2-opt-freq.chk" to current chk file "nh2-opt-freq-bb.chk"
  IOpt=  2 FromEx=T IUOpen= 4 IOptOp= 5 NList=   0 IFRang= 0 IUIn= 4 IUOut= 2.
  -----------------------------------------------
  #p UB3LYP/def2TZVPP SP Geom=AllCheck Guess=Read
@@ -95,17 +95,17 @@
  5/5=2,38=6/2;
  6/7=2,8=2,9=2,10=2,28=1/1;
  99/5=1,9=1/99;
- Leave Link    1 at Tue Nov 10 09:21:49 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
+ Leave Link    1 at Tue Nov 10 09:34:57 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
  (Enter /opt/gaussian/g16/l101.exe)
- Structure from the checkpoint file:  "nh2-def2tzvpp-spe.chk"
+ Structure from the checkpoint file:  "nh2-opt-freq-bb.chk"
  -------------------------------------
  NH2 radical ground-state optimization
  -------------------------------------
  Charge =  0 Multiplicity = 2
  Redundant internal coordinates found in file.  (old form).
- N,0,-0.0827693047,0.,-0.0477868803
- H,0,0.0865902672,0.,0.9755950183
- H,0,0.8881852033,0.,-0.412808138
+ N,0,-0.0827693941,0.,-0.0477868881
+ H,0,0.0865903179,0.,0.9755949872
+ H,0,0.8881850638,0.,-0.4128082787
  Recover connectivity data from disk.
  ITRead=  0  0  0
  MicOpt= -1 -1 -1
@@ -133,7 +133,7 @@
  NQMom=    2.0440000   0.0000000   0.0000000
  NMagM=    0.4037610   2.7928460   2.7928460
  AtZNuc=   7.0000000   1.0000000   1.0000000
- Leave Link  101 at Tue Nov 10 09:21:50 2026, MaxMem=   134217728 cpu:               0.3 elap:               0.2
+ Leave Link  101 at Tue Nov 10 09:34:57 2026, MaxMem=   134217728 cpu:               0.3 elap:               0.2
  (Enter /opt/gaussian/g16/l202.exe)
                           Input orientation:                          
  ---------------------------------------------------------------------
@@ -153,7 +153,7 @@
  Framework group  C2V[C2(N),SGV(H2)]
  Deg. of freedom     2
  Full point group                 C2V     NOp   4
- RotChk:  IX=0 Diff= 1.01D-15
+ RotChk:  IX=0 Diff= 1.67D-15
  Largest Abelian subgroup         C2V     NOp   4
  Largest concise Abelian subgroup C2      NOp   2
                          Standard orientation:                         
@@ -165,8 +165,8 @@
       2          1           0        0.000000    0.801595   -0.512058
       3          1           0        0.000000   -0.801595   -0.512058
  ---------------------------------------------------------------------
- Rotational constants (GHZ):         661.7270359         390.2043719         245.4616152
- Leave Link  202 at Tue Nov 10 09:21:50 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
+ Rotational constants (GHZ):         661.7270361         390.2043719         245.4616152
+ Leave Link  202 at Tue Nov 10 09:34:57 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
  (Enter /opt/gaussian/g16/l301.exe)
  Standard basis: def2TZVPP (5D, 7F)
  Ernie: Thresh=  0.10000D-02 Tol=  0.10000D-05 Strict=F.
@@ -180,7 +180,7 @@
  There are    17 symmetry adapted basis functions of B2  symmetry.
     59 basis functions,    85 primitive gaussians,    66 cartesian basis functions
      5 alpha electrons        4 beta electrons
-       nuclear repulsion energy         7.4721527542 Hartrees.
+       nuclear repulsion energy         7.4721527551 Hartrees.
  IExCor=  402 DFT=T Ex+Corr=B3LYP ExCW=0 ScaHFX=  0.200000
  ScaDFX=  0.800000  0.720000  1.000000  0.810000 ScalE2=  1.000000  1.000000
  IRadAn=      5 IRanWt=     -1 IRanGd=            0 ICorTp=0 IEmpDi=  4
@@ -188,7 +188,7 @@
  Integral buffers will be    131072 words long.
  Raffenetti 2 integral format.
  Two-electron integral symmetry is turned on.
- Leave Link  301 at Tue Nov 10 09:21:50 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.0
+ Leave Link  301 at Tue Nov 10 09:34:58 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.0
  (Enter /opt/gaussian/g16/l302.exe)
  NPDir=0 NMtPBC=     1 NCelOv=     1 NCel=       1 NClECP=     1 NCelD=      1
          NCelK=      1 NCelE2=     1 NClLst=     1 CellRange=     0.0.
@@ -203,12 +203,12 @@
  IXCGrd= 4 IRadAn=           5 IRanWt=          -1 IRanGd=           0 AccXCQ= 0.00D+00.
  Generated NRdTot=       0 NPtTot=           0 NUsed=           0 NTot=          32
  NSgBfM=    66    66    66    66    66 MxSgAt=     3 MxSgA2=     3.
- Leave Link  302 at Tue Nov 10 09:21:50 2026, MaxMem=   134217728 cpu:               0.2 elap:               0.1
+ Leave Link  302 at Tue Nov 10 09:34:58 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.1
  (Enter /opt/gaussian/g16/l303.exe)
  DipDrv:  MaxL=1.
- Leave Link  303 at Tue Nov 10 09:21:50 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
+ Leave Link  303 at Tue Nov 10 09:34:58 2026, MaxMem=   134217728 cpu:               0.0 elap:               0.0
  (Enter /opt/gaussian/g16/l401.exe)
- Initial guess from the checkpoint file:  "nh2-def2tzvpp-spe.chk"
+ Initial guess from the checkpoint file:  "nh2-opt-freq-bb.chk"
  B after Tr=     0.000000    0.000000    0.000000
          Rot=    1.000000    0.000000    0.000000    0.000000 Ang=   0.00 deg.
  Guess basis will be translated and rotated to current coordinates.
@@ -232,7 +232,7 @@
                  (B2) (B2) (B2) (B2) (B2)
  The electronic state of the initial guess is 2-B1.
  Initial guess <Sx>= 0.0000 <Sy>= 0.0000 <Sz>= 0.5000 <S**2>= 0.7527 S= 0.5014
- Leave Link  401 at Tue Nov 10 09:21:50 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.1
+ Leave Link  401 at Tue Nov 10 09:34:58 2026, MaxMem=   134217728 cpu:               0.1 elap:               0.1
  (Enter /opt/gaussian/g16/l502.exe)
  Keep R1 and R2 ints in memory in symmetry-blocked form, NReq=3531222.
  FoFCou: FMM=F IPFlag=           0 FMFlag=           0 FMFlg1=           0
@@ -249,9 +249,9 @@
  No special actions if energy rises.
 
  Cycle   1  Pass 1  IDiag  1:
- E= -55.8667722062881    
+ E= -55.8667722062880    
  DIIS: error= 1.41D-01 at cycle   1 NSaved=   1.
- NSaved= 1 IEnMin= 1 EnMin= -55.8667722062881     IErMin= 1 ErrMin= 1.41D-01
+ NSaved= 1 IEnMin= 1 EnMin= -55.8667722062880     IErMin= 1 ErrMin= 1.41D-01
  ErrMax= 1.41D-01  0.00D+00 EMaxC= 1.00D-01 BMatC= 1.56D+00 BMatP= 1.56D+00
  IDIUse=3 WtCom= 0.00D+00 WtEn= 1.00D+00
  Coeff-Com:  0.100D+01
@@ -264,9 +264,9 @@
  RMSDP=5.21D-03 MaxDP=2.27D-01              OVMax= 5.40D-02
 
  Cycle   2  Pass 1  IDiag  1:
- E= -55.8765396254537     Delta-E=       -0.009767419166 Rises=F Damp=T
+ E= -55.8765396254543     Delta-E=       -0.009767419166 Rises=F Damp=T
  DIIS: error= 1.06D-01 at cycle   2 NSaved=   2.
- NSaved= 2 IEnMin= 2 EnMin= -55.8765396254537     IErMin= 2 ErrMin= 1.06D-01
+ NSaved= 2 IEnMin= 2 EnMin= -55.8765396254543     IErMin= 2 ErrMin= 1.06D-01
  ErrMax= 1.06D-01  0.00D+00 EMaxC= 1.00D-01 BMatC= 8.82D-01 BMatP= 1.56D+00
  IDIUse=3 WtCom= 0.00D+00 WtEn= 1.00D+00
  Coeff-Com: -0.303D+01 0.403D+01
@@ -277,9 +277,9 @@
  RMSDP=3.92D-03 MaxDP=1.71D-01 DE=-9.77D-03 OVMax= 2.18D-03
 
  Cycle   3  Pass 1  IDiag  1:
- E= -55.9063443240083     Delta-E=       -0.029804698555 Rises=F Damp=F
+ E= -55.9063443240117     Delta-E=       -0.029804698557 Rises=F Damp=F
  DIIS: error= 1.79D-03 at cycle   3 NSaved=   3.
- NSaved= 3 IEnMin= 3 EnMin= -55.9063443240083     IErMin= 3 ErrMin= 1.79D-03
+ NSaved= 3 IEnMin= 3 EnMin= -55.9063443240117     IErMin= 3 ErrMin= 1.79D-03
  ErrMax= 1.79D-03  0.00D+00 EMaxC= 1.00D-01 BMatC= 2.98D-04 BMatP= 8.82D-01
  IDIUse=3 WtCom= 9.82D-01 WtEn= 1.79D-02
  Coeff-Com:  0.490D+01-0.653D+01 0.264D+01
@@ -290,9 +290,9 @@
  RMSDP=2.23D-04 MaxDP=3.74D-03 DE=-2.98D-02 OVMax= 4.40D-03
 
  Cycle   4  Pass 1  IDiag  1:
- E= -55.9064021749339     Delta-E=       -0.000057850926 Rises=F Damp=F
+ E= -55.9064021749372     Delta-E=       -0.000057850926 Rises=F Damp=F
  DIIS: error= 6.42D-04 at cycle   4 NSaved=   4.
- NSaved= 4 IEnMin= 4 EnMin= -55.9064021749339     IErMin= 4 ErrMin= 6.42D-04
+ NSaved= 4 IEnMin= 4 EnMin= -55.9064021749372     IErMin= 4 ErrMin= 6.42D-04
  ErrMax= 6.42D-04  0.00D+00 EMaxC= 1.00D-01 BMatC= 4.52D-05 BMatP= 2.98D-04
  IDIUse=3 WtCom= 9.94D-01 WtEn= 6.42D-03
  Coeff-Com:  0.274D+01-0.365D+01 0.132D+01 0.591D+00
@@ -303,9 +303,9 @@
  RMSDP=4.18D-05 MaxDP=9.63D-04 DE=-5.79D-05 OVMax= 1.22D-03
 
  Cycle   5  Pass 1  IDiag  1:
- E= -55.9064116547563     Delta-E=       -0.000009479822 Rises=F Damp=F
+ E= -55.9064116547597     Delta-E=       -0.000009479822 Rises=F Damp=F
  DIIS: error= 9.79D-05 at cycle   5 NSaved=   5.
- NSaved= 5 IEnMin= 5 EnMin= -55.9064116547563     IErMin= 5 ErrMin= 9.79D-05
+ NSaved= 5 IEnMin= 5 EnMin= -55.9064116547597     IErMin= 5 ErrMin= 9.79D-05
  ErrMax= 9.79D-05  0.00D+00 EMaxC= 1.00D-01 BMatC= 7.56D-07 BMatP= 4.52D-05
  IDIUse=1 WtCom= 1.00D+00 WtEn= 0.00D+00
  Coeff-Com:  0.219D+00-0.291D+00 0.788D-01 0.119D+00 0.875D+00
@@ -315,9 +315,9 @@
  RMSDP=6.25D-06 MaxDP=1.57D-04 DE=-9.48D-06 OVMax= 2.42D-04
 
  Cycle   6  Pass 1  IDiag  1:
- E= -55.9064118407684     Delta-E=       -0.000000186012 Rises=F Damp=F
+ E= -55.9064118407719     Delta-E=       -0.000000186012 Rises=F Damp=F
  DIIS: error= 2.14D-05 at cycle   6 NSaved=   6.
- NSaved= 6 IEnMin= 6 EnMin= -55.9064118407684     IErMin= 6 ErrMin= 2.14D-05
+ NSaved= 6 IEnMin= 6 EnMin= -55.9064118407719     IErMin= 6 ErrMin= 2.14D-05
  ErrMax= 2.14D-05  0.00D+00 EMaxC= 1.00D-01 BMatC= 1.97D-08 BMatP= 7.56D-07
  IDIUse=1 WtCom= 1.00D+00 WtEn= 0.00D+00
  Coeff-Com: -0.645D-01 0.860D-01-0.285D-01-0.320D-01-0.732D-01 0.111D+01
@@ -327,9 +327,9 @@
  RMSDP=1.53D-06 MaxDP=2.75D-05 DE=-1.86D-07 OVMax= 6.77D-05
 
  Cycle   7  Pass 1  IDiag  1:
- E= -55.9064118513077     Delta-E=       -0.000000010539 Rises=F Damp=F
+ E= -55.9064118513111     Delta-E=       -0.000000010539 Rises=F Damp=F
  DIIS: error= 5.08D-06 at cycle   7 NSaved=   7.
- NSaved= 7 IEnMin= 7 EnMin= -55.9064118513077     IErMin= 7 ErrMin= 5.08D-06
+ NSaved= 7 IEnMin= 7 EnMin= -55.9064118513111     IErMin= 7 ErrMin= 5.08D-06
  ErrMax= 5.08D-06  0.00D+00 EMaxC= 1.00D-01 BMatC= 1.43D-09 BMatP= 1.97D-08
  IDIUse=1 WtCom= 1.00D+00 WtEn= 0.00D+00
  Coeff-Com:  0.147D-03-0.202D-03 0.673D-03 0.385D-02-0.226D-01-0.270D+00
@@ -341,9 +341,9 @@
  RMSDP=6.20D-07 MaxDP=1.16D-05 DE=-1.05D-08 OVMax= 2.30D-05
 
  Cycle   8  Pass 1  IDiag  1:
- E= -55.9064118523796     Delta-E=       -0.000000001072 Rises=F Damp=F
+ E= -55.9064118523830     Delta-E=       -0.000000001072 Rises=F Damp=F
  DIIS: error= 8.63D-07 at cycle   8 NSaved=   8.
- NSaved= 8 IEnMin= 8 EnMin= -55.9064118523796     IErMin= 8 ErrMin= 8.63D-07
+ NSaved= 8 IEnMin= 8 EnMin= -55.9064118523830     IErMin= 8 ErrMin= 8.63D-07
  ErrMax= 8.63D-07  0.00D+00 EMaxC= 1.00D-01 BMatC= 4.94D-11 BMatP= 1.43D-09
  IDIUse=1 WtCom= 1.00D+00 WtEn= 0.00D+00
  Coeff-Com:  0.235D-02-0.314D-02 0.895D-03 0.790D-04 0.613D-02-0.560D-02
@@ -355,9 +355,9 @@
  RMSDP=1.39D-07 MaxDP=3.13D-06 DE=-1.07D-09 OVMax= 4.57D-06
 
  Cycle   9  Pass 1  IDiag  1:
- E= -55.9064118524152     Delta-E=       -0.000000000036 Rises=F Damp=F
+ E= -55.9064118524185     Delta-E=       -0.000000000036 Rises=F Damp=F
  DIIS: error= 7.17D-08 at cycle   9 NSaved=   9.
- NSaved= 9 IEnMin= 9 EnMin= -55.9064118524152     IErMin= 9 ErrMin= 7.17D-08
+ NSaved= 9 IEnMin= 9 EnMin= -55.9064118524185     IErMin= 9 ErrMin= 7.17D-08
  ErrMax= 7.17D-08  0.00D+00 EMaxC= 1.00D-01 BMatC= 5.25D-13 BMatP= 4.94D-11
  IDIUse=1 WtCom= 1.00D+00 WtEn= 0.00D+00
  Coeff-Com: -0.331D-03 0.441D-03-0.114D-03 0.489D-04-0.931D-03 0.202D-02
@@ -366,12 +366,12 @@
  Coeff:      0.264D-01-0.220D+00 0.119D+01
  Gap=     0.345 Goal=   None    Shift=    0.000
  Gap=     0.194 Goal=   None    Shift=    0.000
- RMSDP=1.15D-08 MaxDP=2.09D-07 DE=-3.56D-11 OVMax= 4.91D-07
+ RMSDP=1.15D-08 MaxDP=2.09D-07 DE=-3.55D-11 OVMax= 4.91D-07
 
  Cycle  10  Pass 1  IDiag  1:
- E= -55.9064118524155     Delta-E=        0.000000000000 Rises=F Damp=F
+ E= -55.9064118524188     Delta-E=        0.000000000000 Rises=F Damp=F
  DIIS: error= 5.61D-09 at cycle  10 NSaved=  10.
- NSaved=10 IEnMin=10 EnMin= -55.9064118524155     IErMin=10 ErrMin= 5.61D-09
+ NSaved=10 IEnMin=10 EnMin= -55.9064118524188     IErMin=10 ErrMin= 5.61D-09
  ErrMax= 5.61D-09  0.00D+00 EMaxC= 1.00D-01 BMatC= 3.24D-15 BMatP= 5.25D-13
  IDIUse=1 WtCom= 1.00D+00 WtEn= 0.00D+00
  Coeff-Com:  0.282D-04-0.376D-04 0.972D-05-0.532D-05 0.723D-04 0.196D-03
@@ -380,16 +380,16 @@
  Coeff:     -0.229D-02 0.101D-01-0.778D-01 0.107D+01
  Gap=     0.345 Goal=   None    Shift=    0.000
  Gap=     0.194 Goal=   None    Shift=    0.000
- RMSDP=1.17D-09 MaxDP=2.66D-08 DE=-2.56D-13 OVMax= 3.56D-08
+ RMSDP=1.17D-09 MaxDP=2.66D-08 DE=-2.70D-13 OVMax= 3.56D-08
 
  SCF Done:  E(UB3LYP) =  -55.9064118524     A.U. after   10 cycles
             NFock= 10  Conv=0.12D-08     -V/T= 2.0049
  <Sx>= 0.0000 <Sy>= 0.0000 <Sz>= 0.5000 <S**2>= 0.7531 S= 0.5016
  <L.S>=  0.00000000000    
- KE= 5.563340514370D+01 PE=-1.457259184852D+02 EE= 2.671394873483D+01
+ KE= 5.563340514406D+01 PE=-1.457259184872D+02 EE= 2.671394873558D+01
  Annihilation of the first spin contaminant:
  S**2 before annihilation     0.7531,   after     0.7500
- Leave Link  502 at Tue Nov 10 09:21:51 2026, MaxMem=   134217728 cpu:               1.0 elap:               0.6
+ Leave Link  502 at Tue Nov 10 09:34:58 2026, MaxMem=   134217728 cpu:               1.0 elap:               0.6
  (Enter /opt/gaussian/g16/l601.exe)
  Copying SCF densities to generalized density rwf, IOpCl= 1 IROHF=0.
 
@@ -479,15 +479,15 @@
  XXXZ=              0.0000 YYYX=              0.0000 YYYZ=              0.0000 ZZZX=              0.0000
  ZZZY=              0.0000 XXYY=             -3.0244 XXZZ=             -3.0103 YYZZ=             -3.1853
  XXYZ=              0.0000 YYXZ=              0.0000 ZZXY=              0.0000
- N-N= 7.472152754204D+00 E-N=-1.457259184772D+02  KE= 5.563340514371D+01
- Symmetry A1   KE= 5.117893622800D+01
- Symmetry A2   KE= 1.554929431562D-32
- Symmetry B1   KE= 1.749618117669D+00
- Symmetry B2   KE= 2.704850798037D+00
- Symmetry A1   SP=-2.199730335082D-15
- Symmetry A2   SP= 3.919568363382D-34
+ N-N= 7.472152755116D+00 E-N=-1.457259184792D+02  KE= 5.563340514406D+01
+ Symmetry A1   KE= 5.117893622813D+01
+ Symmetry A2   KE= 3.143058398073D-21
+ Symmetry B1   KE= 1.749618117650D+00
+ Symmetry B2   KE= 2.704850798275D+00
+ Symmetry A1   SP=-1.187526079102D-14
+ Symmetry A2   SP= 2.468661047106D-21
  Symmetry B1   SP= 1.000000000000D+00
- Symmetry B2   SP=-1.893288156065D-15
+ Symmetry B2   SP=-1.527177151857D-15
                           Isotropic Fermi Contact Couplings
         Atom                 a.u.       MegaHertz       Gauss      10(-4) cm-1
      1  N(14)              0.06970      22.52026       8.03579       7.51195
@@ -531,24 +531,23 @@
  ---------------------------------------------------------------------------------
 
  No NMR shielding tensors so no spin-rotation constants.
- Leave Link  601 at Tue Nov 10 09:21:51 2026, MaxMem=   134217728 cpu:               0.2 elap:               0.1
+ Leave Link  601 at Tue Nov 10 09:34:59 2026, MaxMem=   134217728 cpu:               0.2 elap:               0.1
  (Enter /opt/gaussian/g16/l9999.exe)
  1\1\GINC-TUTORIAL\SP\UB3LYP\def2TZVPP\H2N1(2)\TUTORIAL\10-Nov-2026\0\\#p U
  B3LYP/def2TZVPP SP Geom=AllCheck Guess=Read\\NH2 radical ground-state 
- optimization\\0,2\N,0,-0.0827693047,0.,-0.0477868803\H,0,0.0865902672,
- 0.,0.9755950183\H,0,0.8881852033,0.,-0.412808138\\Version=ES64L-G16Rev
- B.01\State=2-B1\HF=-55.9064119\S2=0.753145\S2-1=0.\S2A=0.750006\RMSD=1
- .167e-09\Dipole=0.63675,0.,0.3676278\Quadrupole=-0.2296479,-0.2599842,
- 0.489632,0.,-0.6229147,0.\PG=C02V [C2(N1),SGV(H2)]\\@
+ optimization\\0,2\N,0,-0.0827693941,0.,-0.0477868881\H,0,0.0865903179,
+ 0.,0.9755949872\H,0,0.8881850638,0.,-0.4128082787\\Version=ES64L-G16Re
+ vB.01\State=2-B1\HF=-55.9064119\S2=0.753145\S2-1=0.\S2A=0.750006\RMSD=
+ 1.167e-09\Dipole=0.63675,0.,0.3676277\Quadrupole=-0.229648,-0.2599842,
+ 0.4896322,0.,-0.6229146,0.\PG=C02V [C2(N1),SGV(H2)]\\@
 
 
- LEARN FROM YESTERDAY,
- LIVE FOR TODAY,
- LOOK TO TOMORROW,
- REST THIS AFTERNOON.
+ THIS CURIOUS WORLD WHICH WE INHABIT IS MORE WONDERFUL THAN IT IS CONVENIENT;
+ MORE BEAUTIFUL THAN IT IS USEFUL;
+ IT IS MORE TO BE ADMIRED THAN IT IS TO BE USED.
 
-           -- SNOOPY
+                                                                 -- THOREAU
  Job cpu time:       0 days  0 hours  0 minutes  2.1 seconds.
  Elapsed time:       0 days  0 hours  0 minutes  1.2 seconds.
  File lengths (MBytes):  RWF=      6 Int=      0 D2E=      0 Chk=      2 Scr=      1
- Normal termination of Gaussian 16 at Tue Nov 10 09:21:51 2026.
+ Normal termination of Gaussian 16 at Tue Nov 10 09:34:59 2026.

@@ -1,5 +1,5 @@
-%oldchk=nh2-def2svp-freq.chk
-%chk=nh2-def2tzvpp-spe.chk
+%oldchk=nh2-opt-freq.chk
+%chk=nh2-opt-freq-bb.chk
 %CPU=0-1
 %mem=1GB
 #p UB3LYP/def2TZVPP SP Geom=AllCheck Guess=Read
