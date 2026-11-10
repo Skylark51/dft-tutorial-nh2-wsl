@@ -1,16 +1,16 @@
 # NH₂ 라디칼 WSL 실습
 
-[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.5.1/NH2-WSL-Manual.hwpx)
+[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.5.2/NH2-WSL-Manual.hwpx)
 
 ## 설치
 
 Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.5.1/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.5.2/install-dft-nh2.sh)
 ```
 
-실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.5.1/activate -i`를 실행합니다.
+실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.5.2/activate -i`를 실행합니다.
 
 실습 디렉터리에서 `ls`를 실행하면 NH₂의 시작 구조인 `nh2.xyz`가 보입니다. `cat nh2.xyz`로 좌표(Å)를 확인할 수 있습니다.
 
@@ -61,6 +61,22 @@ g16 < nh2-opt-freq.inp > nh2-opt-freq.out
 ```
 
 검색어 `Frequencies --`. 1531.9485, 3324.1809, 3406.8390 cm⁻¹.
+
+`Geom=Check` 형식도 사용할 수 있습니다. 이 형식은 route 뒤에 제목과 `0 2`를 적고, 좌표를 체크포인트에서 읽습니다.
+
+```text
+%chk=nh2-opt-freq.chk
+%oldchk=nh2-opt.chk
+%CPU=0-1
+%mem=1GB
+#p UB3LYP/def2SVP Freq Pop=Full Guess=Read Geom=Check
+
+NH2
+
+0 2
+
+```
+
 
 ### 1C. BB · Freq 체크포인트에서 큰 기저 단일점 계산
 
@@ -139,7 +155,7 @@ g16 < nh2-opt-freq-bb-stable.inp > nh2-opt-freq-bb-stable.out
 
 ## 별도 예제 · 기저별 오비탈 교환
 
-각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.5.1/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
+각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.5.2/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
 
 | 단계 | def2SVP 예시 파일명 | Route에 추가할 항목 |
 |---|---|---|

@@ -86,6 +86,11 @@ def validate(source):
     route = " ".join(section("Start with a route and end it with a blank line.")).lower()
     match = re.fullmatch(r"#(?:[pn]\s+|\s*)(.+)", route)
     words = re.sub(r"\s*,\s*", ",", match[1]).split() if match else []
+    geom_check = any(word in {"geom=check", "geom=checkpoint"} for word in words)
+    words = [
+        "geom=allcheck" if word in {"geom=check", "geom=checkpoint", "geom=allcheckpoint"} else word
+        for word in words
+    ]
     methods = {f"ub3lyp/{basis}" for basis in BASES} & set(words)
     step = ROUTES.get(frozenset(set(words) - methods))
     if not step or len(methods) != 1 or len(words) != len(set(words)):
@@ -96,7 +101,7 @@ def validate(source):
     chk = headers.get("chk")
     oldchk = headers.get("oldchk")
     if not chk or bool(oldchk) != (step in PREREQUISITES) or (oldchk and chk.casefold() == oldchk.casefold()):
-        raise ValueError("Use %chk for this job and, for Geom=AllCheck, a separate %oldchk.")
+        raise ValueError("Use %chk for this job and, when reading a checkpoint, a separate %oldchk.")
 
     reference = COURSE_REFERENCES.get(step, f"nh2-{basis}-{step}")
     if step == "opt":
@@ -106,6 +111,11 @@ def validate(source):
             reference = "nh2-opt"
     elif step == "freq" and "pop=full" in words:
         reference = "nh2-opt-freq"
+    if geom_check:
+        section("Geom=Check requires a title followed by a blank line.")
+        charge = section("Geom=Check requires charge and multiplicity (0 2), then a blank line.")
+        if len(charge) != 1 or charge[0].split() != ["0", "2"]:
+            raise ValueError("With Geom=Check, enter only 0 2 in the molecule section; coordinates come from %oldchk.")
     if step in {"swap", "alter"}:
         if len(lines) < 3 or lines[0] or lines[1].split() != ["4", "5"] or lines[2]:
             raise ValueError("After the route's blank line, leave another blank line for alpha, then enter 4 5 and a blank line for beta.")
