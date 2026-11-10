@@ -1,18 +1,20 @@
 # NH₂ 라디칼 WSL 실습
 
-[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.5.0/NH2-WSL-Manual.hwpx)
+[NH₂ 전체 실습 매뉴얼 (HWPX)](https://github.com/Skylark51/dft-tutorial-nh2-wsl/releases/download/v1.5.1/NH2-WSL-Manual.hwpx)
 
 ## 설치
 
 Ubuntu WSL의 Bash에서 실행합니다. `curl`, Python 3, `vi`가 필요합니다.
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.5.0/install-dft-nh2.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/Skylark51/dft-tutorial-nh2-wsl/v1.5.1/install-dft-nh2.sh)
 ```
 
-실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.5.0/activate -i`를 실행합니다.
+실습 디렉터리 이름을 입력합니다. Enter만 누르면 `nh2`를 사용합니다. 다시 열 때 같은 이름을 입력하면 이전 작업이 남아 있습니다. 인터넷 없이 다시 열 때는 `bash --rcfile ~/.local/share/dft-nh2/v1.5.1/activate -i`를 실행합니다.
 
 실습 디렉터리에서 `ls`를 실행하면 NH₂의 시작 구조인 `nh2.xyz`가 보입니다. `cat nh2.xyz`로 좌표(Å)를 확인할 수 있습니다.
+
+입력의 route, 원소 기호와 `%chk`·`%oldchk`는 대소문자를 섞어 쓸 수 있습니다. 체크포인트는 정확한 이름을 먼저 찾고, 일치하는 파일이 없으면 대소문자를 무시해 유일한 후보를 찾습니다. 셸에서 `g16 < 파일.inp`에 쓰는 파일명은 실제 이름과 일치해야 합니다.
 
 ## 1. Opt → Freq → BB
 
@@ -137,7 +139,7 @@ g16 < nh2-opt-freq-bb-stable.inp > nh2-opt-freq-bb-stable.out
 
 ## 별도 예제 · 기저별 오비탈 교환
 
-각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.5.0/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
+각 파일을 `vi 파일명.inp`로 열어 입력을 작성합니다. `i`로 입력하고 Esc 후 `:wq`로 저장합니다. 완성 입력은 `~/.local/share/dft-nh2/v1.5.1/data/`의 `*.inp` 파일에 있습니다. 아래 파일명은 예시입니다.
 
 | 단계 | def2SVP 예시 파일명 | Route에 추가할 항목 |
 |---|---|---|
